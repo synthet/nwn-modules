@@ -1,0 +1,51 @@
+{
+  "__data_type": "IFO ",
+  "Expansion_Pack": { "type": "word",  "value": 0 },
+  "Mod_Creator_ID": { "type": "int",   "value": -1 },
+  "Mod_CustomTlk":  { "type": "cexostring", "value": "starter_project" },
+  "Mod_Description": {
+    "type": "cexolocstring",
+    "str_ref": 4294967295,
+    "value": { "0": "A starter NWN:EE module." }
+  },
+  "Mod_Entry_Area":  { "type": "resref", "value": "start_area" },
+  "Mod_Entry_Dir_X": { "type": "float",  "value": 1.0 },
+  "Mod_Entry_Dir_Y": { "type": "float",  "value": 0.0 },
+  "Mod_Entry_X":     { "type": "float",  "value": 1.5 },
+  "Mod_Entry_Y":     { "type": "float",  "value": 1.5 },
+  "Mod_Entry_Z":     { "type": "float",  "value": 0.0 },
+  "Mod_HakList": {
+    "type": "list",
+    "value": [
+      {
+        "__struct_id": 8,
+        "Mod_Hak": { "type": "cexostring", "value": "starter_art" }
+      }
+    ]
+  },
+  "Mod_MinGameVer":      { "type": "cexostring", "value": "89.8193.37" },
+  "Mod_Name": {
+    "type": "cexolocstring",
+    "str_ref": 4294967295,
+    "value": { "0": "Starter Module" }
+  },
+  "Mod_OnActvtItem":      { "type": "resref", "value": "" },
+  "Mod_OnClientEntr":     { "type": "resref", "value": "mod_on_client_enter" },
+  "Mod_OnHeartbeat":      { "type": "resref", "value": "" },
+  "Mod_OnModLoad":        { "type": "resref", "value": "mod_on_load" },
+  "Mod_OnModStart":       { "type": "resref", "value": "" },
+  "Mod_OnNuiEvent":       { "type": "resref", "value": "" },
+  "Mod_OnPlrDeath":       { "type": "resref", "value": "" },
+  "Mod_OnPlrDying":       { "type": "resref", "value": "" },
+  "Mod_OnPlrEqItm":       { "type": "resref", "value": "" },
+  "Mod_OnPlrLvlUp":       { "type": "resref", "value": "" },
+  "Mod_OnPlrRest":        { "type": "resref", "value": "" },
+  "Mod_OnPlrUnEqItm":     { "type": "resref", "value": "" },
+  "Mod_OnSpawnBtnDn":     { "type": "resref", "value": "" },
+  "Mod_OnUnAcquirItem":   { "type": "resref", "value": "" },
+  "Mod_OnUserDefined":    { "type": "resref", "value": "" },
+  "Mod_StartMovie":       { "type": "cexostring", "value": "" },
+  "Mod_Tag":              { "type": "cexostring", "value": "STARTER_MODULE" },
+  "Mod_Version":          { "type": "dword", "value": 1 },
+  "Mod_XPScale":          { "type": "byte",  "value": 10 }
+}
