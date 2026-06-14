@@ -1,4 +1,4 @@
-// Compatibility wrapper for older module settings.
+// Module OnClientEnter event handler.
 #include "evt_client"
 
 void main()
