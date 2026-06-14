@@ -2,6 +2,8 @@
 
 This document defines the minimum operational backup and restore expectations for production deploys of the persistent world server. Treat these steps as release-blocking until the team has a tested automation pipeline.
 
+Use this document as the canonical restore runbook for the operational backup set. Higher-level design documents may link to it, but production deploy checklists should keep the detailed artifact list, script contract, and restore drill cadence here so operators do not have to reconcile competing instructions during an incident.
+
 ## Pre-Deploy Backup Checklist
 
 Before every production deploy, capture enough state to return the live server to the exact previously released build and database contents.
@@ -71,3 +73,12 @@ Each restore drill should prove that operators can:
 6. Record drill date, release identifier, restore duration, operator names, issues found, and follow-up actions in release notes or the operations log.
 
 A restore process is not considered production-ready until a second operator can repeat it from documentation without relying on the original author.
+
+## Pre-Production Promotion Gate
+
+Do not promote a release to production until an operator has confirmed that:
+
+1. The current production release bundle exists and contains the database dump, `.mod`, `.hak`, `.tlk`, NWSync, environment, release-note, and log artifacts described above.
+2. The candidate release notes identify every migration, content package, and NWSync publication step that would need to be rolled back.
+3. The placeholder scripts have been run with the target `PW_ENV` values so missing environment variables are caught before the maintenance window.
+4. The most recent restore drill is still within the required cadence, or an out-of-band drill has been scheduled before launch when the release changes database, NWSync, or hosting assumptions.
