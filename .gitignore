@@ -1,0 +1,34 @@
+# Nasher per-user config — intentionally excluded per Nasher docs
+user.cfg
+
+# Generated build artifacts — distribute via Releases, not Git
+build/dist/*.mod
+build/dist/*.hak
+build/dist/*.tlk
+*.mod
+*.hak
+*.tlk
+
+# Nasher temp and cache
+.nasher/
+nasher-temp/
+
+# NWN user-folder installed files (NWN_HOME paths)
+# These are runtime installs, not source
+modules/
+hak/
+tlk/
+override/
+
+# Art source files that are too large for Git (commit exports only)
+art/textures/*.psd
+art/textures/*.xcf
+art/textures/*.kra
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Editor temp files
+*.tmp
+*~
