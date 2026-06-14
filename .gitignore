@@ -1,0 +1,25 @@
+# Local Nasher/user configuration
+user.cfg
+*.user.cfg
+
+# NWN generated release artifacts
+*.mod
+*.hak
+*.erf
+*.tlk
+*.ncs
+
+# Build and distribution output
+build/
+dist/
+
+# Local NWN install/user folders that should not be committed
+Neverwinter Nights/
+nwn_home/
+nwn_root/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
