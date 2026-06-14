@@ -1,0 +1,4 @@
+2DA V2.0
+
+       Label              StrRef     ModelName         Faction      HasInventory  AnimationParams  ModelType  PaletteID  Comment
+0      plc_campfire       -1         plc_campfire      ****         0             ****             S          0          Project custom campfire

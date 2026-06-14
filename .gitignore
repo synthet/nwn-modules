@@ -1,25 +1,44 @@
-# Local Nasher/user configuration
+# Nasher per-user config — intentionally excluded per Nasher docs
 user.cfg
 *.user.cfg
 
-# NWN generated release artifacts
+# Generated NWN build artifacts — distribute via Releases, not Git
+build/dist/*.mod
+build/dist/*.hak
+build/dist/*.tlk
 *.mod
 *.hak
 *.erf
 *.tlk
 *.ncs
 
-# Build and distribution output
-build/
-dist/
+# Nasher temp and cache
+.nasher/
+nasher-temp/
 
-# Local NWN install/user folders that should not be committed
+# NWN user-folder installed files (NWN_HOME paths)
+# These are runtime installs, not source
+modules/
+hak/
+tlk/
+override/
+
+# Local NWN install paths that should not be committed
 Neverwinter Nights/
 nwn_home/
 nwn_root/
 
-# OS/editor noise
+# Art source files that are too large for Git (commit exports only)
+art/textures/*.psd
+art/textures/*.xcf
+art/textures/*.kra
+
+# OS noise
 .DS_Store
 Thumbs.db
+
+# Editor temp files and IDE project files
+*.tmp
+*~
 .vscode/
 .idea/
