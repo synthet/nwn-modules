@@ -17,7 +17,7 @@
   "permissions": {
     "allowInstallToNwnUserDir": false,
     "allowStartServer": false,
-    "allowAuroraLaunch": true,
+    "allowAuroraLaunch": false,
     "allowDeleteFiles": false
   }
 }

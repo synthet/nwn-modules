@@ -4,7 +4,7 @@ This directory contains small wrappers for the recommended NWN:EE Aurora/Nasher 
 
 ## Third-party tools directory
 
-Install Nasher, neverwinter.nim / `nwnsc`, NWNT, and optional NWNX builds outside the Git repo under `NWN_TOOLS`. On this workstation:
+Install Nasher, neverwinter.nim / `nwn_script_comp`, NWNT, and optional NWNX builds outside the Git repo under `NWN_TOOLS`. On this workstation:
 
 ```
 D:\Projects\nwn-tools\
@@ -13,6 +13,8 @@ D:\Projects\nwn-tools\
   nwnx\   — NWNX:EE (optional)
   nwnt\   — NWNT helper (optional)
 ```
+
+See [docs/design/nwn-tools-layout.md](../docs/design/nwn-tools-layout.md) for the full file and folder inventory on this machine.
 
 Copy `.env.example` to `.env` at the repo root and set `NWN_TOOLS`. Every script here sources `tools/env.sh`, which loads `.env` and prepends `NWN_TOOLS/bin` to `PATH`.
 

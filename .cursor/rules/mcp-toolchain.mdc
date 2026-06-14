@@ -1,0 +1,30 @@
+---
+description: Prefer nwn-project MCP tools over ad-hoc shell for build tasks
+alwaysApply: true
+---
+
+# MCP toolchain
+
+When the **nwn-project** MCP server is connected, prefer typed tool calls over manual shell:
+
+| Task | MCP tool |
+|------|----------|
+| Layout check | `nwn.project.validate_layout` |
+| Build | `nwn.nasher.build` |
+| Compile | `nwn.script.compile_all`, `nwn.script.diagnostics` |
+| Symbol search | `nwn.script.find_symbol` |
+| Resref lookup | `nwn.nasher.resource_lookup` |
+| Git diff | `nwn.project.diff_summary` |
+| ADR | `nwn.docs.add_decision` |
+
+Fall back to `tools/*.sh` or `scripts/*.ps1` when MCP is unavailable.
+
+## Permissions (nwn-mcp.config.json)
+
+- `allowDeleteFiles: false` — blocks `nwn.nasher.clean` by default
+- `allowAuroraLaunch: false` — blocks Aurora launch by default
+- `allowStartServer: false` — blocks NWNX server start by default
+
+Do not enable dangerous permissions without explicit user request.
+
+Setup: `config/ai/README.md`

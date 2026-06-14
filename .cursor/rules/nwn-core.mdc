@@ -1,0 +1,31 @@
+---
+description: Core NWN project constraints and artifact rules
+alwaysApply: true
+---
+
+# NWN core constraints
+
+- Source of truth is the Nasher tree under `src/` — not `.mod`, `.hak`, or `.tlk` files.
+- Never commit build artifacts: `*.mod`, `*.hak`, `*.tlk`, `*.ncs`, `*.erf`.
+- Never commit secrets: `.env`, `docker/.env`, `docker/.env.staging`, `docker/.env.prod`.
+- Toolchain versions are pinned in `docs/design/toolchain.md` — do not bump without review.
+- Propose toolchain changes through normal PR review, not autonomous version bumps.
+
+## Layout
+
+- `src/scripts/` — NWScript source (compiles to git-ignored `.ncs`)
+- `src/module/`, `src/areas/`, `src/dialogs/`, `src/blueprints/` — Nasher JSON/GFF
+- `build/dist/` — packaged artifacts (git-ignored)
+- `database/migrations/` — append-only PostgreSQL schema
+
+## Script naming
+
+| Prefix | Purpose |
+|--------|---------|
+| `inc_*` | Utility/library includes |
+| `db_*` | Database repository functions |
+| `sys_*` | Gameplay systems |
+| `evt_*` | Event dispatcher entry points |
+| `qst_*` | Quest logic |
+| `adm_*` | Admin/DM commands |
+| `plc_*` / `cre_*` / `trg_*` | Per-object scripts |

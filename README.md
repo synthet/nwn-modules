@@ -44,6 +44,18 @@ On this machine, third-party tools install under `D:\Projects\nwn-tools`. The re
 - [Modern NWN:EE persistent world project design](docs/design/persistent-world-project.md)
 - [Tooling script guide](tools/README.md)
 
+## AI assistant setup
+
+Cursor and Claude Code share project-scoped slash commands, skills, rules, and MCP tooling.
+
+- [AGENTS.md](AGENTS.md) — cross-tool agent briefing
+- [config/ai/README.md](config/ai/README.md) — MCP and IDE setup (Windows + Linux)
+- **Slash commands:** `/validate`, `/compile`, `/build`, `/pr-ready`, and more
+- **Cursor:** `.cursor/commands/`, `.cursor/rules/`, `.cursor/skills/`
+- **Claude Code:** `.claude/skills/` (slash commands + background skills)
+
+Copy `nwn-mcp.config.example.json` → `nwn-mcp.config.json` and `.cursor/mcp.json.example` → `.cursor/mcp.json` before connecting the **nwn-project** MCP server.
+
 ## Project principles
 
 1. Use the Aurora Toolset for visual/module authoring.

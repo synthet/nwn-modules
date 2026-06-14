@@ -9,3 +9,5 @@ This project pins its initial Neverwinter Nights: Enhanced Edition module workfl
 - Texture tooling: GIMP `3.2.4`, with NVIDIA Texture Tools Exporter `2024.1.1` optional for DDS output.
 
 Contributors should not upgrade the game build, Blender, NeverBlender, or Nasher independently. Propose toolchain changes through normal review so the team can test the authoring, build, and runtime impact together.
+
+Third-party binaries install under `NWN_TOOLS` (default on this workstation: `D:\Projects\nwn-tools`). See [nwn-tools-layout.md](nwn-tools-layout.md) for the on-disk directory structure.

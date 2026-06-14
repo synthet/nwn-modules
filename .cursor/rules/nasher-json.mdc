@@ -1,0 +1,18 @@
+---
+description: Nasher JSON source conventions for src/
+globs: "src/**/*.json"
+alwaysApply: false
+---
+
+# Nasher JSON sources
+
+- Files under `src/` are produced by `nasher unpack` or authored as Nasher-compatible JSON.
+- Validate JSON before commit: `python3 -m json.tool <file>` or MCP `nwn.nasher.validate`.
+- Resrefs must be unique within their resource type; use `nwn.nasher.resource_lookup` to check collisions.
+- Module properties live in `src/module/module.ifo.json` — event script fields use script resrefs without `.nss`.
+- Dialog, blueprint, and area JSON follow Nasher field names — do not invent ad-hoc schema keys.
+
+## Do not
+
+- Commit generated `.mod`/`.hak` instead of editing JSON source.
+- Hand-edit binary GFF outside the Nasher/Aurora round-trip without documenting why.

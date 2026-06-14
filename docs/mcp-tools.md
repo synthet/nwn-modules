@@ -39,8 +39,14 @@ node dist/index.js --help 2>&1 | head
 
 ### nwn-mcp.config.json
 
+Copy from the committed example:
+
+```bash
+cp nwn-mcp.config.example.json nwn-mcp.config.json
+```
+
 The server reads `nwn-mcp.config.json` from the repo root (or
-`tools/mcp/nwn-project-mcp/`). Edit tool commands and paths:
+`tools/mcp/nwn-project-mcp/`). Edit tool commands and paths locally — this file is git-ignored.
 
 ```json
 {
@@ -107,18 +113,42 @@ File: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ### Cursor
 
-File: `~/.cursor/mcp.json`
+Copy the project example to a local override (git-ignored):
+
+```bash
+cp .cursor/mcp.json.example .cursor/mcp.json
+```
+
+File: `.cursor/mcp.json` (project-scoped) or `~/.cursor/mcp.json` (global).
+Project-level config overrides global when the same server name is defined.
 
 ```json
 {
   "mcpServers": {
     "nwn-project": {
       "command": "node",
-      "args": ["tools/mcp/nwn-project-mcp/dist/index.js"]
+      "args": ["tools/mcp/nwn-project-mcp/dist/index.js"],
+      "env": {
+        "NWN_ROOT": "/path/to/NeverwinterNights/NWN",
+        "NWN_MCP_CONFIG": "nwn-mcp.config.json"
+      }
     }
   }
 }
 ```
+
+See [config/ai/README.md](../config/ai/README.md) for full setup.
+
+### Claude Code
+
+Merge `config/ai/claude-code.mcp.json.example` into your project `.claude/settings.json`
+or user MCP config. Use repo-relative paths when running from the project root.
+
+### Claude Desktop
+
+Use `config/ai/claude-desktop.mcp.json.example` — absolute paths required.
+Merge into `%APPDATA%\Claude\claude_desktop_config.json` (Windows) or
+`~/Library/Application Support/Claude/claude_desktop_config.json` (macOS).
 
 ### Codex / OpenAI
 

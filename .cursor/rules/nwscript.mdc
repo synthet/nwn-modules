@@ -1,0 +1,37 @@
+---
+description: NWScript conventions and event chain
+globs: "**/*.nss"
+alwaysApply: false
+---
+
+# NWScript
+
+## Event chain
+
+```
+mod_on_load.nss → evt_module.nss → inc_bootstrap.nss (Bootstrap_Init)
+evt_on_enter.nss → evt_client.nss (login, validation, quests)
+evt_on_leave.nss → evt_client.nss (session save, audit)
+```
+
+Wire new module events through `evt_*` dispatchers, not directly in `mod_*` stubs.
+
+## Includes
+
+- Utility: `#include "inc_*"` from `src/scripts/`
+- DB layer: `#include "inc_db_*"` from `src/scripts/include/db/`
+- Keep `include/` for libraries only — not entry-point scripts.
+
+## Compile loop
+
+```bash
+bash tools/compile-scripts.sh
+# or MCP: nwn.script.compile / nwn.script.diagnostics
+```
+
+Fix `file:line` diagnostics before committing. Compiled `.ncs` goes to `build/ncs/` (git-ignored).
+
+## Style
+
+- One responsibility per script file; match existing naming in the directory.
+- Campaign DB in `inc_db_core.nss` is intentional — do not "fix" by switching to NWNX SQL unless asked.

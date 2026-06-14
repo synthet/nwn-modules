@@ -1,0 +1,21 @@
+---
+description: PostgreSQL migration rules (append-only)
+globs: "database/migrations/**"
+alwaysApply: false
+---
+
+# Database migrations
+
+- Name: zero-padded sequence + description, e.g. `0002_add_factions.sql`.
+- Apply in filename order, exactly once per environment.
+- **Append-only after deploy** — never edit a migration already applied to staging or production.
+- No required down-migrations; rollback via backup/restore or a forward-fix migration.
+- Optional seed data belongs in `database/seeds/`, not in schema migrations.
+- Run all new migrations in staging before promoting to production.
+
+## SQL style
+
+- Explicit column types, constraints, indexes, and foreign-key behavior.
+- Deterministic and safe for automated deployment pipelines.
+
+See `database/docs/README.md` for full process.

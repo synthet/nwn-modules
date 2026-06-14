@@ -1,5 +1,7 @@
 # NWN:EE Persistent World Module
 
+See also [AGENTS.md](AGENTS.md) for the cross-tool agent briefing (slash commands, skills, MCP setup).
+
 ## What this project is
 
 Neverwinter Nights: Enhanced Edition persistent world starter kit. The Nasher text tree under `src/` is the source of truth. `.mod`, `.hak`, `.tlk`, and `.ncs` files are build artifacts — they are excluded from Git and must never be committed.
@@ -100,3 +102,24 @@ For staging/production, also set `NWN_SERVER_IMAGE` to a pinned digest in the en
 - Schema migrations in `database/migrations/` are append-only after deployment
 - Toolchain version changes require explicit review — do not bump pins autonomously
 - The `inc_db_core.nss` wrapper uses campaign DB now; switching to NWNX SQL is intentional future work, not a bug to fix
+
+## Slash commands (Claude Code)
+
+Type `/` to invoke project workflows defined in `.claude/skills/`:
+
+| Command | Purpose |
+|---------|---------|
+| `/validate` | JSON + smoke + compile-all |
+| `/compile` | Compile `.nss` with diagnostics |
+| `/build` | Nasher pack (module/art/tlk/all) |
+| `/diff-summary` | Git diff grouped by NWN concept |
+| `/find-symbol` | Search NWScript symbols |
+| `/resource-lookup` | Find resref in `src/` |
+| `/new-script` | Scaffold `.nss` with correct prefix |
+| `/new-migration` | Scaffold next SQL migration |
+| `/pr-ready` | CI-equivalent checks + PR summary |
+| `/adr` | Create architecture decision record |
+
+Background skills (auto-loaded): `nwscript-authoring`, `nwscript-db-layer`, `database-migrations`, `nwn-build-toolchain`, `docker-ops`.
+
+MCP setup: [config/ai/README.md](config/ai/README.md)

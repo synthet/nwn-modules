@@ -1,4 +1,4 @@
-import { resolve, relative } from "path";
+import { resolve, sep } from "path";
 
 /**
  * Resolves a path relative to workspaceRoot and validates it stays inside.
@@ -9,9 +9,8 @@ export function safePath(workspaceRoot: string, relativePath: string): string {
   const resolved = resolve(root, relativePath);
 
   // Ensure the resolved path starts with the root directory prefix.
-  // We append the platform separator to avoid false positives where root is
-  // a prefix of a sibling directory (e.g. /foo matching /foobar).
-  const rootWithSep = root.endsWith("/") ? root : root + "/";
+  // Use path.sep so Windows backslash paths compare correctly.
+  const rootWithSep = root.endsWith(sep) ? root : root + sep;
 
   if (resolved !== root && !resolved.startsWith(rootWithSep)) {
     throw new Error(`Path traversal rejected: ${relativePath}`);

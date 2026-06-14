@@ -39,7 +39,10 @@ Thumbs.db
 
 # Local environment and machine-specific tool paths
 .env
+nwn-mcp.config.json
 nwn-mcp.config.local.json
+.cursor/mcp.json
+tools/mcp/nwn-project-mcp/.env
 
 # Editor temp files and IDE project files
 *.tmp

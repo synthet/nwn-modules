@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nwn-project": {
+      "command": "node",
+      "args": ["ABSOLUTE_PATH_TO_REPO/tools/mcp/nwn-project-mcp/dist/index.js"],
+      "env": {
+        "NWN_ROOT": "ABSOLUTE_PATH_TO_NWN_INSTALL",
+        "NWN_MCP_CONFIG": "ABSOLUTE_PATH_TO_REPO/nwn-mcp.config.json"
+      }
+    }
+  }
+}
