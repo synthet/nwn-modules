@@ -52,11 +52,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: tools/mcp/nwn-project-mcp/package-lock.json
+          node-version: "22"
       - name: Install dependencies
-        run: cd tools/mcp/nwn-project-mcp && npm ci
+        run: cd tools/mcp/nwn-project-mcp && npm install
       - name: Build
         run: cd tools/mcp/nwn-project-mcp && npm run build
       - name: Run MCP server tests
