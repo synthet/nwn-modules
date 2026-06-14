@@ -1,0 +1,63 @@
+name: NWN Module CI
+
+on:
+  push:
+    branches: [main, "feature/**", "claude/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate project layout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required files exist
+        run: |
+          test -f nasher.cfg || (echo "nasher.cfg missing" && exit 1)
+          test -d src/scripts || (echo "src/scripts missing" && exit 1)
+          test -d src/module || (echo "src/module missing" && exit 1)
+          echo "Layout OK"
+
+  test-mock:
+    name: Run mock unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run script tests
+        run: |
+          cd $GITHUB_WORKSPACE
+          python3 -m pytest tools/testing/script-tests/ -v || python3 -m unittest discover tools/testing/script-tests/
+
+  compile-nwscript:
+    name: Compile NWScript (optional, requires nwnsc)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check if nwnsc available
+        id: check
+        run: which nwnsc && echo "available=true" >> $GITHUB_OUTPUT || echo "available=false" >> $GITHUB_OUTPUT
+      - name: Compile scripts
+        if: steps.check.outputs.available == 'true'
+        run: ./scripts/compile-scripts
+
+  build-mcp-server:
+    name: Build MCP server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: tools/mcp/nwn-project-mcp/package-lock.json
+      - name: Install dependencies
+        run: cd tools/mcp/nwn-project-mcp && npm ci
+      - name: Build
+        run: cd tools/mcp/nwn-project-mcp && npm run build
+      - name: Run MCP server tests
+        run: cd tools/mcp/nwn-project-mcp && npm test

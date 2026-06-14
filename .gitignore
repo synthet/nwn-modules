@@ -47,3 +47,12 @@ Thumbs.db
 docker/.env
 docker/.env.*
 !docker/env.example
+
+# MCP server build output
+tools/mcp/nwn-project-mcp/dist/
+tools/mcp/nwn-project-mcp/node_modules/
+
+# Python test artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
