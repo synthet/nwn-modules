@@ -50,8 +50,75 @@ export function createTools(config: NwnMcpConfig) {
   async function docsSearch(input:z.infer<typeof schemas.search>) { const files = await fg([`${config.paths.docs}/**/*.{md,txt}`, 'README.md','DESIGN.md','CONTRIBUTING.md'],{cwd:root}); const q=input.query.toLowerCase(), matches: Array<{file:string;line:number;text:string}> = []; for (const f of files) { const lines=(await readFile(path.join(root,f),'utf8')).split('\n'); lines.forEach((line: string,i: number)=>{ if (line.toLowerCase().includes(q) && matches.length<input.limit) matches.push({file:f,line:i+1,text:line.trim()}); }); } return { success:true, matches }; }
   async function auroraLaunch(input:z.infer<typeof schemas.launch>) { if (!config.permissions.allowAuroraLaunch) return { success:false,error:'Aurora launch is disabled by permissions.allowAuroraLaunch.'}; const mp=resolveWorkspacePath(root,input.modulePath); return runCommand(config.tools.auroraToolset.command,safeArgs([mp]),{cwd:root,detached:true}); }
   async function auroraSnapshot(input:z.infer<typeof schemas.snapshot>) { const mp=resolveWorkspacePath(root,input.modulePath); await stat(mp); const dir=path.join(root,config.paths.build,'snapshots'); await mkdir(dir,{recursive:true}); const ext=path.extname(mp); const dest=path.join(dir,`${path.basename(mp,ext)}-${new Date().toISOString().replace(/[:.]/g,'-')}-${input.label}${ext}`); await copyFile(mp,dest); return { success:true, snapshot:toRelative(root,dest) }; }
+
+  function nwnxRoot() { return resolveWorkspacePath(root, config.tools.nwnx.root); }
+  function nwnxServerCommand() { return resolveWorkspacePath(root, config.tools.nwnx.serverCommand); }
+  async function nwnxCheckInstallation() {
+    const nwnxPath = nwnxRoot();
+    const serverCommand = nwnxServerCommand();
+    const rootExists = await exists(nwnxPath);
+    const rootInfo = rootExists ? await stat(nwnxPath).catch(() => null) : null;
+    const serverCommandExists = await exists(serverCommand);
+    return {
+      success: rootExists && Boolean(rootInfo?.isDirectory()) && serverCommandExists,
+      root: toRelative(root, nwnxPath),
+      rootExists,
+      rootIsDirectory: Boolean(rootInfo?.isDirectory()),
+      serverCommand: toRelative(root, serverCommand),
+      serverCommandExists
+    };
+  }
+  async function nwnxListPlugins() {
+    const nwnxPath = nwnxRoot();
+    const rootInfo = await stat(nwnxPath).catch(() => null);
+    if (!rootInfo?.isDirectory()) return { success: false, plugins: [], error: `NWNX directory does not exist: ${toRelative(root, nwnxPath)}` };
+    const dirs = ['plugins', 'Plugins', '.'];
+    const plugins: Array<{name:string;file:string}> = [];
+    for (const dir of dirs) {
+      const absDir = resolveWorkspacePath(root, path.join(config.tools.nwnx.root, dir));
+      const entries = await readdir(absDir, { withFileTypes: true }).catch(() => []);
+      for (const entry of entries) {
+        if (!entry.isFile()) continue;
+        if (!/^(?:NWNX_|nwnx_).+\.(?:so|dll|dylib)$/i.test(entry.name)) continue;
+        plugins.push({ name: entry.name.replace(/\.(?:so|dll|dylib)$/i, ''), file: toRelative(root, path.join(absDir, entry.name)) });
+      }
+    }
+    plugins.sort((a, b) => a.file.localeCompare(b.file));
+    return { success: true, root: toRelative(root, nwnxPath), plugins };
+  }
+  async function nwnxStartServer() {
+    if (!config.permissions.allowStartServer) return { success:false, error:'NWNX server start/stop is disabled by permissions.allowStartServer.' };
+    const cwd = nwnxRoot();
+    const rootInfo = await stat(cwd).catch(() => null);
+    if (!rootInfo?.isDirectory()) return { success:false, error:`NWNX directory does not exist: ${toRelative(root, cwd)}` };
+    return runCommand(nwnxServerCommand(), [], { cwd, detached: true });
+  }
+  async function nwnxStopServer() {
+    if (!config.permissions.allowStartServer) return { success:false, error:'NWNX server start/stop is disabled by permissions.allowStartServer.' };
+    const cwd = nwnxRoot();
+    const rootInfo = await stat(cwd).catch(() => null);
+    if (!rootInfo?.isDirectory()) return { success:false, error:`NWNX directory does not exist: ${toRelative(root, cwd)}` };
+    return runCommand(nwnxServerCommand(), safeArgs(['--stop']), { cwd });
+  }
+  async function nwnxTailLogs() {
+    const nwnxPath = nwnxRoot();
+    const candidates = ['logs/nwnx.txt', 'logs/nwserverLog1.txt', 'nwnx.txt', 'nwserverLog1.txt'];
+    for (const candidate of candidates) {
+      const abs = resolveWorkspacePath(root, path.join(config.tools.nwnx.root, candidate));
+      if (!(await exists(abs))) continue;
+      const lines = (await readFile(abs, 'utf8')).split('\n');
+      return { success: true, file: toRelative(root, abs), lines: lines.slice(-100) };
+    }
+    return { success: false, root: toRelative(root, nwnxPath), lines: [], error: 'No NWNX log file found.' };
+  }
+  async function nwnxRunSmokeTest() {
+    const install = await nwnxCheckInstallation();
+    const pluginList = await nwnxListPlugins();
+    return { success: install.success && pluginList.success, installation: install, plugins: pluginList.plugins };
+  }
+
   const scaffold = (name:string) => async () => ({ success:false, implemented:false, tool:name, error:'Scaffold only in MVP; intentionally not implemented yet.' });
   return { inspect, validateLayout, diffSummary, nasherBuild, nasherValidate, resourceLookup, compile, compileAll, findSymbol, docsSearch, auroraLaunch, auroraSnapshot,
-    auroraWatchChanges: scaffold('nwn.aurora.watch_changes'), auroraImportAfterSave: scaffold('nwn.aurora.import_after_save'), nwnxCheckInstallation: scaffold('nwn.nwnx.check_installation'), nwnxListPlugins: scaffold('nwn.nwnx.list_plugins'), nwnxStartServer: scaffold('nwn.nwnx.start_server'), nwnxStopServer: scaffold('nwn.nwnx.stop_server'), nwnxTailLogs: scaffold('nwn.nwnx.tail_logs'), nwnxRunSmokeTest: scaffold('nwn.nwnx.run_smoke_test'), assetsIndex: scaffold('nwn.assets.index'), assetsFindResref: scaffold('nwn.assets.find_resref'), assetsAuditAttribution: scaffold('nwn.assets.audit_attribution') };
+    auroraWatchChanges: scaffold('nwn.aurora.watch_changes'), auroraImportAfterSave: scaffold('nwn.aurora.import_after_save'), nwnxCheckInstallation, nwnxListPlugins, nwnxStartServer, nwnxStopServer, nwnxTailLogs, nwnxRunSmokeTest, assetsIndex: scaffold('nwn.assets.index'), assetsFindResref: scaffold('nwn.assets.find_resref'), assetsAuditAttribution: scaffold('nwn.assets.audit_attribution') };
 }
 export const emptySchema = empty;
