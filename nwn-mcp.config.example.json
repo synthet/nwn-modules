@@ -2,7 +2,7 @@
   "workspaceRoot": ".",
   "tools": {
     "nasher": { "command": "nasher" },
-    "nwscriptCompiler": { "command": "nwnsc" },
+    "nwscriptCompiler": { "command": "nwn_script_comp" },
     "auroraToolset": { "command": "" },
     "nwnx": { "root": "./external/nwnx", "serverCommand": "" }
   },

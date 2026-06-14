@@ -1,11 +1,13 @@
 {
   "mcpServers": {
     "nwn-project": {
-      "command": "node",
+      "command": "C:/Program Files/nodejs/node.exe",
       "args": ["tools/mcp/nwn-project-mcp/dist/index.js"],
       "env": {
         "NWN_ROOT": "SET_IN_LOCAL_mcp.json",
-        "NWN_MCP_CONFIG": "nwn-mcp.config.json"
+        "NWN_TOOLS": "D:/Projects/nwn-tools",
+        "NWN_MCP_CONFIG": "nwn-mcp.config.json",
+        "PATH": "D:/Projects/nwn-tools/bin;C:/Program Files/nodejs"
       }
     }
   }

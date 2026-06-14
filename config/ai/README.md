@@ -29,6 +29,7 @@ Copy each example to its local override:
 | `nwn-mcp.config.example.json` | `nwn-mcp.config.json` | Tool paths, permissions |
 | `.cursor/mcp.json.example` | `.cursor/mcp.json` | Cursor MCP connection |
 | `tools/mcp/nwn-project-mcp/.env.example` | `tools/mcp/nwn-project-mcp/.env` | `NWN_ROOT`, compiler paths |
+| `config/ai/claude-code.mcp.json.example` | `.claude/settings.json` | Claude Code MCP connection |
 
 ### nwn-mcp.config.json
 
@@ -47,7 +48,7 @@ Edit locally:
 cp .cursor/mcp.json.example .cursor/mcp.json
 ```
 
-Set `NWN_ROOT` to your NWN:EE install directory. Restart Cursor or toggle the server in **Settings → Tools & MCP**.
+Set `NWN_ROOT` to your NWN:EE install directory. On Windows, set `command` to the full path of `node.exe` (Cursor's MCP host often lacks shell `PATH` — `spawn node ENOENT` otherwise). Restart Cursor or toggle the server in **Settings → Tools & MCP**.
 
 ### Claude Code
 

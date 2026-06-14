@@ -42,6 +42,8 @@ Thumbs.db
 nwn-mcp.config.json
 nwn-mcp.config.local.json
 .cursor/mcp.json
+.claude/settings.json
+.claude/settings.local.json
 tools/mcp/nwn-project-mcp/.env
 
 # Editor temp files and IDE project files
