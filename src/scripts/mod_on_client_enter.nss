@@ -1,10 +1,15 @@
 // Module OnClientEnter event handler.
+#include "inc_db_characters"
+
 // Fired each time a player client connects.
 void main()
 {
     object oPC = GetEnteringObject();
     if (!GetIsPC(oPC))
         return;
+
+    DB_TouchAccountForPC(oPC);
+    DB_SaveCharacterMetadata(oPC);
 
     if (GetIsNewPC(oPC))
     {
