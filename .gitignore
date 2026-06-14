@@ -37,6 +37,10 @@ art/textures/*.kra
 .DS_Store
 Thumbs.db
 
+# Local environment and machine-specific tool paths
+.env
+nwn-mcp.config.local.json
+
 # Editor temp files and IDE project files
 *.tmp
 *~

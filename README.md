@@ -22,9 +22,20 @@ The two most important pins are the NWN:EE build line and the Blender/NeverBlend
 ## Environment setup
 
 ```sh
-# Required environment variables — add to your shell profile
+# Copy the template and set your local paths
+cp .env.example .env
+
+# Required environment variables
+export NWN_TOOLS="/path/to/nwn-tools"   # third-party binaries (Nasher, nwnsc, NWNT, NWNX, …)
 export NWN_ROOT="/path/to/NeverwinterNightsEE"
 export NWN_HOME="/path/to/Documents/Neverwinter Nights"
+```
+
+On this machine, third-party tools install under `D:\Projects\nwn-tools`. The repo `.env` sets `NWN_TOOLS`; `tools/env.sh` and `tools/env.ps1` load it and prepend `NWN_TOOLS/bin` to `PATH` for build scripts and MCP.
+
+```powershell
+# PowerShell — load before building or running MCP
+. .\tools\env.ps1
 ```
 
 ## Design documents

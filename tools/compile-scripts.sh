@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sh"
+
 SCRIPT_DIR="src/scripts"
 OUT_DIR="build/ncs"
 mkdir -p "$OUT_DIR"

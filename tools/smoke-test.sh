@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/env.sh"
+
 required_paths=(
   "nasher.cfg"
   "src/module/module.ifo.json"
@@ -16,5 +18,10 @@ for path in "${required_paths[@]}"; do
     exit 1
   fi
 done
+
+if [[ -n "${NWN_TOOLS:-}" && ! -d "$NWN_TOOLS" ]]; then
+  echo "NWN_TOOLS is set but directory is missing: $NWN_TOOLS" >&2
+  exit 1
+fi
 
 echo "Project smoke test passed."

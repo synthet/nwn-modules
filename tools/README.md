@@ -2,6 +2,28 @@
 
 This directory contains small wrappers for the recommended NWN:EE Aurora/Nasher workflow. They are intentionally conservative: each script verifies that its required command is installed before running it.
 
+## Third-party tools directory
+
+Install Nasher, neverwinter.nim / `nwnsc`, NWNT, and optional NWNX builds outside the Git repo under `NWN_TOOLS`. On this workstation:
+
+```
+D:\Projects\nwn-tools\
+  bin\    — executables on PATH
+  nim\    — neverwinter.nim / Nasher toolchain
+  nwnx\   — NWNX:EE (optional)
+  nwnt\   — NWNT helper (optional)
+```
+
+Copy `.env.example` to `.env` at the repo root and set `NWN_TOOLS`. Every script here sources `tools/env.sh`, which loads `.env` and prepends `NWN_TOOLS/bin` to `PATH`.
+
+```powershell
+. .\tools\env.ps1   # PowerShell
+```
+
+```sh
+source tools/env.sh # bash / Git Bash
+```
+
 ## Scripts
 
 - `build.sh` — builds the module target with Nasher.
@@ -15,6 +37,7 @@ This directory contains small wrappers for the recommended NWN:EE Aurora/Nasher 
 Set these environment variables in your shell profile when working locally:
 
 ```sh
+export NWN_TOOLS="/path/to/nwn-tools"
 export NWN_ROOT="/path/to/NeverwinterNightsEE"
 export NWN_HOME="/path/to/Documents/Neverwinter Nights"
 ```
