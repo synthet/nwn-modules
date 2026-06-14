@@ -42,3 +42,8 @@ Thumbs.db
 *~
 .vscode/
 .idea/
+
+# Docker deployment environment files may contain secrets
+docker/.env
+docker/.env.*
+!docker/env.example

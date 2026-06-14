@@ -1,0 +1,13 @@
+:80 {
+	encode zstd gzip
+
+	# Static NWSync placeholder. Generate/sync NWSync manifests and payloads into
+	# docker/runtime*/nwsync, then set NWSYNC_URL to this route.
+	handle_path /nwsync/* {
+		root * /srv/nwsync
+		file_server browse
+		header Cache-Control "public, max-age=300"
+	}
+
+	respond /healthz 200
+}
