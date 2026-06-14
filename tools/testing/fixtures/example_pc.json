@@ -1,0 +1,15 @@
+{
+  "tag": "test_pc",
+  "name": "Test Player",
+  "local_vars": {
+    "int": {
+      "q_state": 2,
+      "has_item": 1,
+      "faction_rep": 5
+    },
+    "string": {
+      "q_tag": "qst_missing_caravan"
+    },
+    "float": {}
+  }
+}

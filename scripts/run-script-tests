@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Run NWScript mock unit tests using Python.
+# Requires: python3 (3.8+)
+# Usage: ./scripts/run-script-tests
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+TESTS_DIR="${REPO_ROOT}/tools/testing/script-tests"
+
+# Check for python3
+if ! command -v python3 &>/dev/null; then
+    echo "ERROR: python3 not found on PATH."
+    echo ""
+    echo "Install instructions:"
+    echo "  Linux:   sudo apt-get install python3"
+    echo "  macOS:   brew install python3  OR  install from https://python.org"
+    echo "  Windows: https://python.org/downloads (use python instead of python3)"
+    exit 1
+fi
+
+PYTHON_VERSION=$(python3 -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+echo "Python version: ${PYTHON_VERSION}"
+
+if [ ! -d "${TESTS_DIR}" ]; then
+    echo "ERROR: Test directory not found: ${TESTS_DIR}"
+    exit 1
+fi
+
+cd "${REPO_ROOT}"
+
+# Try pytest first, fall back to unittest
+if python3 -m pytest --version &>/dev/null 2>&1; then
+    echo "Test runner: pytest"
+    echo ""
+    python3 -m pytest "${TESTS_DIR}" -v
+    EXIT_CODE=$?
+else
+    echo "pytest not found. Falling back to unittest."
+    echo "  (Install pytest for better output: pip3 install pytest)"
+    echo ""
+    python3 -m unittest discover "${TESTS_DIR}" -v
+    EXIT_CODE=$?
+fi
+
+exit ${EXIT_CODE}

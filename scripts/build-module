@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# Build the module using Nasher.
+# Requires: nasher on PATH
+# Usage: ./scripts/build-module [--target module|art|tlk|all]
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+TARGET="module"
+
+for arg in "$@"; do
+    case "$arg" in
+        --target)
+            # next argument is the value — handled below
+            ;;
+        module|art|tlk|all)
+            TARGET="${arg}"
+            ;;
+        --target=*)
+            TARGET="${arg#--target=}"
+            ;;
+        *)
+            echo "Unknown argument: $arg" >&2
+            echo "Usage: $0 [--target module|art|tlk|all]" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Validate target
+case "${TARGET}" in
+    module|art|tlk|all) ;;
+    *)
+        echo "ERROR: Unknown target '${TARGET}'. Valid targets: module, art, tlk, all"
+        exit 1
+        ;;
+esac
+
+# Check for nasher
+if ! command -v nasher &>/dev/null; then
+    echo "ERROR: nasher not found on PATH."
+    echo ""
+    echo "Install instructions:"
+    echo "  Nasher requires Nim. Install from: https://nim-lang.org"
+    echo "  Then: nimble install nasher"
+    echo ""
+    echo "  Or see docs/design/toolchain.md for the pinned version."
+    exit 1
+fi
+
+NASHER_VERSION=$(nasher --version 2>&1 || true)
+echo "Nasher: ${NASHER_VERSION}"
+echo "Target: ${TARGET}"
+echo "Repo:   ${REPO_ROOT}"
+echo ""
+
+cd "${REPO_ROOT}"
+
+BUILD_FAILED=0
+
+run_target() {
+    local t="$1"
+    echo "--- Building target: ${t} ---"
+    OUTPUT=$(nasher pack "${t}" 2>&1) || BUILD_FAILED=1
+    echo "${OUTPUT}"
+
+    if [ "${BUILD_FAILED}" -eq 0 ]; then
+        # Try to find the output file path from nasher output
+        DIST_FILE=$(echo "${OUTPUT}" | grep -oE 'build/dist/[^ ]+\.(mod|hak|tlk)' | head -1 || true)
+        if [ -n "${DIST_FILE}" ]; then
+            echo ""
+            echo "Output: ${REPO_ROOT}/${DIST_FILE}"
+        else
+            echo ""
+            echo "Output: ${REPO_ROOT}/build/dist/ (check above for filename)"
+        fi
+    fi
+    echo ""
+}
+
+if [ "${TARGET}" = "all" ]; then
+    for t in module art tlk; do
+        run_target "${t}"
+    done
+else
+    run_target "${TARGET}"
+fi
+
+if [ "${BUILD_FAILED}" -ne 0 ]; then
+    echo "Build FAILED. See diagnostics above."
+    exit 1
+fi
+
+echo "Build complete."

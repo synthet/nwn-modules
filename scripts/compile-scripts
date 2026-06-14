@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+# Compile all NWScript files using nwnsc.
+# Requires: nwnsc on PATH, NWN_ROOT env var pointing to NWN installation.
+# Usage: ./scripts/compile-scripts [--changed-only]
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+SCRIPTS_DIR="${REPO_ROOT}/src/scripts"
+
+CHANGED_ONLY=0
+for arg in "$@"; do
+    case "$arg" in
+        --changed-only) CHANGED_ONLY=1 ;;
+        *) echo "Unknown argument: $arg" >&2; exit 1 ;;
+    esac
+done
+
+# Check for nwnsc
+if ! command -v nwnsc &>/dev/null; then
+    echo "ERROR: nwnsc not found on PATH."
+    echo ""
+    echo "Install instructions:"
+    echo "  Linux/macOS: https://github.com/nwnsc/nwnsc/releases"
+    echo "  Extract nwnsc binary and place it on your PATH, e.g.:"
+    echo "    sudo cp nwnsc /usr/local/bin/"
+    echo ""
+    echo "  Or install via Nasher toolchain (see docs/design/toolchain.md)"
+    exit 1
+fi
+
+# Warn if NWN_ROOT is not set
+if [ -z "${NWN_ROOT:-}" ]; then
+    echo "WARNING: NWN_ROOT is not set. nwnsc may not find NWN data files."
+    echo "  Set NWN_ROOT to your NWN installation directory, e.g.:"
+    echo "    export NWN_ROOT=/path/to/NeverwinterNights/NWN"
+    echo ""
+fi
+
+# Collect .nss files
+if [ "${CHANGED_ONLY}" -eq 1 ]; then
+    echo "Mode: --changed-only (diffing against HEAD)"
+    mapfile -t NSS_FILES < <(
+        git -C "${REPO_ROOT}" diff --name-only HEAD -- 'src/scripts/*.nss' 2>/dev/null \
+            | sed "s|^|${REPO_ROOT}/|"
+    )
+    if [ "${#NSS_FILES[@]}" -eq 0 ]; then
+        echo "No changed .nss files found relative to HEAD."
+        echo "0 compiled, 0 failed"
+        exit 0
+    fi
+else
+    mapfile -t NSS_FILES < <(find "${SCRIPTS_DIR}" -name '*.nss' | sort)
+fi
+
+if [ "${#NSS_FILES[@]}" -eq 0 ]; then
+    echo "No .nss files found in ${SCRIPTS_DIR}"
+    echo "0 compiled, 0 failed"
+    exit 0
+fi
+
+COMPILED=0
+FAILED=0
+
+for NSS_FILE in "${NSS_FILES[@]}"; do
+    if [ ! -f "${NSS_FILE}" ]; then
+        echo "  SKIP (not a file): ${NSS_FILE}"
+        continue
+    fi
+
+    REL_PATH="${NSS_FILE#${REPO_ROOT}/}"
+    printf "  Compiling: %s ... " "${REL_PATH}"
+
+    # Build nwnsc args
+    NWNSC_ARGS=("-e" "-o" "/dev/null")
+    if [ -n "${NWN_ROOT:-}" ]; then
+        NWNSC_ARGS+=("-n" "${NWN_ROOT}")
+    fi
+    NWNSC_ARGS+=("${NSS_FILE}")
+
+    # Run nwnsc and capture output
+    NWNSC_OUTPUT=""
+    NWNSC_EXIT=0
+    NWNSC_OUTPUT=$(nwnsc "${NWNSC_ARGS[@]}" 2>&1) || NWNSC_EXIT=$?
+
+    if [ "${NWNSC_EXIT}" -eq 0 ]; then
+        echo "OK"
+        COMPILED=$((COMPILED + 1))
+    else
+        echo "FAILED"
+        FAILED=$((FAILED + 1))
+        # Print diagnostics in file:line:column format
+        while IFS= read -r line; do
+            # nwnsc format: "filename.nss(42): Error: message"
+            # Reformat to: filepath:line: severity: message
+            if [[ "${line}" =~ ^(.+)\(([0-9]+)\):\ (.+)$ ]]; then
+                DIAG_FILE="${BASH_REMATCH[1]}"
+                DIAG_LINE="${BASH_REMATCH[2]}"
+                DIAG_MSG="${BASH_REMATCH[3]}"
+                echo "    ${DIAG_FILE}:${DIAG_LINE}: ${DIAG_MSG}"
+            else
+                echo "    ${line}"
+            fi
+        done <<< "${NWNSC_OUTPUT}"
+    fi
+done
+
+echo ""
+echo "Summary: ${COMPILED} compiled, ${FAILED} failed"
+
+if [ "${FAILED}" -gt 0 ]; then
+    exit 1
+fi
