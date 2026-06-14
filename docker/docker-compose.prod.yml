@@ -1,0 +1,36 @@
+# Production overlay placeholder: use with
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml --env-file docker/.env.prod up -d
+# Before first production use, replace example.invalid values, pin NWN_SERVER_IMAGE
+# to an immutable digest/tag, and move secrets to the host secret manager.
+services:
+  nwserver:
+    container_name: nwn-server-prod
+    restart: always
+    environment:
+      NWN_SERVER_NAME: ${NWN_SERVER_NAME:-Starter Module}
+      NWSYNC_URL: ${NWSYNC_URL:-https://play.example.invalid/nwsync/}
+    volumes:
+      - ./runtime-prod/modules:/nwn/home/modules
+      - ./runtime-prod/hak:/nwn/home/hak
+      - ./runtime-prod/tlk:/nwn/home/tlk
+      - ./runtime-prod/logs:/nwn/home/logs
+
+  db:
+    container_name: nwn-db-prod
+    restart: always
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./backups-prod:/backups
+
+  nwsync:
+    container_name: nwn-nwsync-prod
+    restart: always
+    ports:
+      - "${NWSYNC_HTTP_PORT:-80}:80/tcp"
+      # Enable after configuring a real hostname in Caddyfile.
+      # - "443:443/tcp"
+    volumes:
+      - ./runtime-prod/nwsync:/srv/nwsync:ro
+
+volumes:
+  postgres_prod_data:

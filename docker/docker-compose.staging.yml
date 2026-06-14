@@ -1,0 +1,32 @@
+# Staging overlay: use with
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.staging.yml --env-file docker/.env.staging up -d
+# Keep staging private by default. Promote only immutable build/dist artifacts that
+# have passed smoke tests and a database migration rehearsal.
+services:
+  nwserver:
+    container_name: nwn-server-staging
+    profiles: ["staging"]
+    environment:
+      NWN_SERVER_NAME: ${NWN_SERVER_NAME:-Starter Module Staging}
+      NWSYNC_URL: ${NWSYNC_URL:-http://staging.example.invalid/nwsync/}
+    volumes:
+      - ./runtime-staging/modules:/nwn/home/modules
+      - ./runtime-staging/hak:/nwn/home/hak
+      - ./runtime-staging/tlk:/nwn/home/tlk
+      - ./runtime-staging/logs:/nwn/home/logs
+
+  db:
+    container_name: nwn-db-staging
+    profiles: ["staging"]
+    volumes:
+      - postgres_staging_data:/var/lib/postgresql/data
+      - ./backups-staging:/backups
+
+  nwsync:
+    container_name: nwn-nwsync-staging
+    profiles: ["staging"]
+    volumes:
+      - ./runtime-staging/nwsync:/srv/nwsync:ro
+
+volumes:
+  postgres_staging_data:
