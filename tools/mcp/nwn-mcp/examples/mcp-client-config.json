@@ -1,0 +1,1 @@
+{"mcpServers":{"nwn":{"command":"node","args":["tools/mcp/nwn-mcp/dist/server.js"],"env":{"NWN_MCP_CONFIG":"nwn-mcp.config.json"}}}}
