@@ -18,7 +18,7 @@ void Event_DispatchClientEnter(object oPC)
 
 void Event_DispatchClientLeave(object oPC)
 {
-    if (!GetIsObjectValid(oPC) || !GetIsPC(oPC))
+    if (!GetIsObjectValid(oPC))
         return;
 
     Session_Save(oPC);

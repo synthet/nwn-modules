@@ -8,9 +8,10 @@ void DB_CheckAvailability()
 
 void Session_Save(object oPC)
 {
-    if (!GetIsObjectValid(oPC) || !GetIsPC(oPC))
+    if (!GetIsObjectValid(oPC))
         return;
 
     // Future: persist account, character, location, quest state, and audit metadata.
-    SetLocalString(oPC, "PW_SESSION_LAST_SAVED_NAME", GetName(oPC));
+    // Do not write locals to oPC here; OnClientLeave objects may be detached.
+    WriteTimestampedLogEntry("[Session] Save requested for " + GetName(oPC));
 }
