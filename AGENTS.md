@@ -92,6 +92,7 @@ Type `/` in Cursor or Claude Code:
 | `/new-script` | Scaffold `.nss` with correct prefix |
 | `/new-migration` | Scaffold next SQL migration |
 | `/pr-ready` | CI-equivalent checks + PR summary |
+| `/commit-and-push` | Commit and push with git safety rules |
 | `/adr` | Create architecture decision record |
 
 | IDE | Slash commands | Background skills |

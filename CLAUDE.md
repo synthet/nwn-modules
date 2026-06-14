@@ -118,6 +118,7 @@ Type `/` to invoke project workflows defined in `.claude/skills/`:
 | `/new-script` | Scaffold `.nss` with correct prefix |
 | `/new-migration` | Scaffold next SQL migration |
 | `/pr-ready` | CI-equivalent checks + PR summary |
+| `/commit-and-push` | Commit and push with git safety rules |
 | `/adr` | Create architecture decision record |
 
 Background skills (auto-loaded): `nwscript-authoring`, `nwscript-db-layer`, `database-migrations`, `nwn-build-toolchain`, `docker-ops`.
