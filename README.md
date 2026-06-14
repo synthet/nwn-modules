@@ -27,6 +27,12 @@ export NWN_ROOT="/path/to/NeverwinterNightsEE"
 export NWN_HOME="/path/to/Documents/Neverwinter Nights"
 ```
 
+## Design documents
+
+- [Toolchain baseline](docs/design/toolchain.md)
+- [Modern NWN:EE persistent world project design](docs/design/persistent-world-project.md)
+- [Tooling script guide](tools/README.md)
+
 ## Project principles
 
 1. Use the Aurora Toolset for visual/module authoring.
