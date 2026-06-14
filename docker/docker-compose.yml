@@ -1,8 +1,10 @@
 services:
   nwserver:
-    # Replace with the team's pinned NWN:EE dedicated-server image before live use.
-    # The default is intentionally an override point so local operators can choose
-    # Beamdog/SteamCMD/NWNX-based images without changing this compose file.
+    # IMPORTANT: Pin NWN_SERVER_IMAGE to an immutable commit digest for staging/production.
+    # Example (set in docker/.env):
+    #   NWN_SERVER_IMAGE=ghcr.io/nwnxee/unified@sha256:<digest>
+    # See: https://nwnxee.github.io/unified/
+    # The :latest tag is intentionally an override point for local development only.
     image: ${NWN_SERVER_IMAGE:-ghcr.io/nwnxee/unified:latest}
     container_name: nwn-server
     restart: unless-stopped
@@ -20,7 +22,19 @@ services:
       DATABASE_NAME: ${DATABASE_NAME:-nwn_persistent_world}
       DATABASE_PORT: ${DATABASE_PORT:-5432}
       DATABASE_USER: ${DATABASE_USER:-nwn}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-change-me-local-only}
       NWSYNC_URL: ${NWSYNC_URL:-http://localhost:8080/nwsync/}
+      # NWNX SQL plugin — connects to the db service using the vars above
+      NWNX_SQL_TYPE: postgresql
+      NWNX_SQL_HOST: ${DATABASE_HOST:-db}
+      NWNX_SQL_PORT: ${DATABASE_PORT:-5432}
+      NWNX_SQL_USERNAME: ${DATABASE_USER:-nwn}
+      NWNX_SQL_PASSWORD: ${DATABASE_PASSWORD:-change-me-local-only}
+      NWNX_SQL_DATABASE: ${DATABASE_NAME:-nwn_persistent_world}
+      # NWNX ThreadWatchdog — kills and restarts a hung server process
+      NWNX_ThreadWatchdog_Timeout: "180"
+      # Disable metric export by default; enable when InfluxDB/Grafana are available
+      NWNX_Metrics_InfluxDB_SKIP: "true"
     ports:
       - "${NWN_SERVER_PORT:-5121}:5121/udp"
     volumes:

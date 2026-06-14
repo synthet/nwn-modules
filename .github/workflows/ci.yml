@@ -1,61 +1,102 @@
-name: NWN Module CI
+name: CI
 
 on:
   push:
-    branches: [main, "feature/**", "claude/**"]
+    branches: ["main", "claude/**", "feature/**"]
   pull_request:
-    branches: [main]
+    branches: ["main"]
+
+env:
+  NWN_TOOLS_VERSION: "2.1.2"
+  NASHER_VERSION: "1.1.2"
 
 jobs:
   validate:
-    name: Validate project layout
+    name: Validate sources
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check required files exist
-        run: |
-          test -f nasher.cfg || (echo "nasher.cfg missing" && exit 1)
-          test -d src/scripts || (echo "src/scripts missing" && exit 1)
-          test -d src/module || (echo "src/module missing" && exit 1)
-          echo "Layout OK"
 
-  test-mock:
-    name: Run mock unit tests
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Run script tests
-        run: |
-          cd $GITHUB_WORKSPACE
-          python3 -m pytest tools/testing/script-tests/ -v || python3 -m unittest discover tools/testing/script-tests/
+      - name: Check out
+        uses: actions/checkout@v4
 
-  compile-nwscript:
-    name: Compile NWScript (optional, requires nwnsc)
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check if nwnsc available
-        id: check
-        run: which nwnsc && echo "available=true" >> $GITHUB_OUTPUT || echo "available=false" >> $GITHUB_OUTPUT
-      - name: Compile scripts
-        if: steps.check.outputs.available == 'true'
-        run: ./scripts/compile-scripts
+      - name: Validate JSON sources
+        run: |
+          error=0
+          while IFS= read -r -d '' f; do
+            python3 -m json.tool "$f" > /dev/null \
+              || { echo "Invalid JSON: $f"; error=1; }
+          done < <(find src/ -name '*.json' -print0)
+          exit "$error"
+
+      - name: Run smoke test
+        run: bash tools/smoke-test.sh
+
+      - name: Install neverwinter.nim compiler tools
+        id: nwn_tools
+        run: |
+          URL="https://github.com/niv/neverwinter.nim/releases/download/${NWN_TOOLS_VERSION}/neverwinter.linux_amd64.tar.gz"
+          if curl -fsSL "$URL" -o /tmp/nwn.tar.gz; then
+            sudo tar -xzf /tmp/nwn.tar.gz -C /usr/local/bin
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "Installed neverwinter.nim ${NWN_TOOLS_VERSION}"
+          else
+            echo "::warning::Could not download neverwinter.nim ${NWN_TOOLS_VERSION}. Skipping NWScript compilation."
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compile NWScript
+        if: steps.nwn_tools.outputs.available == 'true'
+        run: bash tools/compile-scripts.sh
 
   build-mcp-server:
     name: Build MCP server
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
+
       - name: Install dependencies
         run: cd tools/mcp/nwn-project-mcp && npm install
+
       - name: Build
         run: cd tools/mcp/nwn-project-mcp && npm run build
+
       - name: Run MCP server tests
         run: cd tools/mcp/nwn-project-mcp && npm test
+
+  package:
+    name: Pack module
+    needs: validate
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install Nim
+        uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: stable
+
+      - name: Install Nasher
+        run: nimble install -y "nasher@${NASHER_VERSION}"
+
+      - name: Build module and hak artifacts
+        run: |
+          mkdir -p build/dist
+          nasher pack module --yes
+          nasher pack art tlk --yes
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "module-${{ github.sha }}"
+          path: build/dist/
+          retention-days: 14

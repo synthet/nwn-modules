@@ -1,0 +1,60 @@
+# NWN:EE persistent world server — systemd unit template.
+#
+# Install:
+#   sudo cp deploy/systemd/nwn-server.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now nwn-server
+#
+# View logs:
+#   journalctl -u nwn-server -f
+#   journalctl -u nwn-server --since "1 hour ago"
+#
+# Adjust WorkingDirectory, User, Group, and ExecStart paths for your host.
+
+[Unit]
+Description=Neverwinter Nights Enhanced Edition dedicated server
+Documentation=https://github.com/synthet/nwn-modules/blob/main/docs/design/server-operations.md
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=nwn
+Group=nwn
+WorkingDirectory=/opt/nwn
+
+# Docker Compose deployment (recommended).
+# Pin NWN_SERVER_IMAGE in the env file to an immutable digest before production use.
+ExecStart=/usr/bin/docker compose \
+    --env-file /opt/nwn/config/.env \
+    -f /opt/nwn/compose/docker-compose.yml \
+    -f /opt/nwn/compose/docker-compose.prod.yml \
+    up --remove-orphans --abort-on-container-exit
+
+ExecStop=/usr/bin/docker compose \
+    --env-file /opt/nwn/config/.env \
+    -f /opt/nwn/compose/docker-compose.yml \
+    -f /opt/nwn/compose/docker-compose.prod.yml \
+    stop nwserver
+
+# Alternative: direct NWNX binary (uncomment and adjust if not using Compose)
+# ExecStart=/opt/nwn/nwnx/nwserver \
+#     -module starter_module \
+#     -port 5121 \
+#     -nwsyncurl https://play.example.invalid/nwsync/
+# EnvironmentFile=/opt/nwn/config/nwnx.env
+
+Restart=on-failure
+RestartSec=15s
+
+# Structured logging via journald — query with journalctl -u nwn-server
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nwn-server
+
+# Limit blast radius of a compromised or malfunctioning server process
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
