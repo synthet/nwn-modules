@@ -1,4 +1,4 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
   existsSync,
@@ -80,7 +80,7 @@ ${consequences}
 `;
 }
 
-export function registerDocsTools(server: Server, config: Config): void {
+export function registerDocsTools(server: McpServer, config: Config): void {
   const root    = resolve(config.workspaceRoot);
   const docsDir = join(root, config.paths.docs);
 

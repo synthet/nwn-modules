@@ -1,4 +1,4 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
   existsSync,
@@ -32,7 +32,7 @@ function findFiles(
   return results;
 }
 
-export function registerNasherTools(server: Server, config: Config): void {
+export function registerNasherTools(server: McpServer, config: Config): void {
   const root = resolve(config.workspaceRoot);
   const nasherCmd = config.tools.nasher.command;
 

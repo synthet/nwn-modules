@@ -1,4 +1,4 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { existsSync, readdirSync } from "fs";
 import { join, resolve, basename } from "path";
@@ -83,7 +83,7 @@ function findNssFiles(dir: string, results: string[] = []): string[] {
   return results;
 }
 
-export function registerScriptTools(server: Server, config: Config): void {
+export function registerScriptTools(server: McpServer, config: Config): void {
   const root = resolve(config.workspaceRoot);
   const nwnscCmd = config.tools.nwscriptCompiler.command;
   const scriptsDir = join(root, config.paths.scripts);

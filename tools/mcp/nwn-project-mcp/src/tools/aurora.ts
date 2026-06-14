@@ -1,4 +1,4 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { existsSync, copyFileSync, mkdirSync, readdirSync } from "fs";
 import { join, resolve, basename } from "path";
@@ -6,7 +6,7 @@ import { spawn } from "child_process";
 import { Config } from "../config.js";
 import { safePath } from "../utils/paths.js";
 
-export function registerAuroraTools(server: Server, config: Config): void {
+export function registerAuroraTools(server: McpServer, config: Config): void {
   const root = resolve(config.workspaceRoot);
 
   // ---- nwn.aurora.launch ---------------------------------------------------

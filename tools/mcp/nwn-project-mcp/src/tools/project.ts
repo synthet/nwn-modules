@@ -1,4 +1,4 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join, resolve } from "path";
@@ -28,7 +28,7 @@ function countFiles(dir: string, ext: string): number {
 // ---------------------------------------------------------------------------
 // Tool registration
 // ---------------------------------------------------------------------------
-export function registerProjectTools(server: Server, config: Config): void {
+export function registerProjectTools(server: McpServer, config: Config): void {
   const root = resolve(config.workspaceRoot);
 
   // ---- nwn.project.inspect -------------------------------------------------

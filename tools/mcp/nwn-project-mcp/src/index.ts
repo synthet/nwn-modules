@@ -12,7 +12,7 @@
  * tools/mcp/nwn-project-mcp/).
  */
 
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { loadConfig } from "./config.js";
 import { registerProjectTools } from "./tools/project.js";
@@ -26,9 +26,8 @@ import { registerAssetsTools } from "./tools/assets.js";
 async function main(): Promise<void> {
   const config = loadConfig();
 
-  const server = new Server(
-    { name: "nwn-project-mcp", version: "0.1.0" },
-    { capabilities: { tools: {} } }
+  const server = new McpServer(
+    { name: "nwn-project-mcp", version: "0.1.0" }
   );
 
   // Register all tool groups

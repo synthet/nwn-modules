@@ -6,7 +6,7 @@
  * asset index built from the hak/art pipeline.
  */
 
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Config } from "../config.js";
 
 function scaffoldedResponse(toolName: string, detail?: string) {
@@ -25,7 +25,7 @@ function scaffoldedResponse(toolName: string, detail?: string) {
   };
 }
 
-export function registerAssetsTools(server: Server, config: Config): void {
+export function registerAssetsTools(server: McpServer, config: Config): void {
   // ---- nwn.assets.index ----------------------------------------------------
   server.tool(
     "nwn.assets.index",
