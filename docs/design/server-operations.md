@@ -1,3 +1,12 @@
+---
+type: Runbook
+title: Server operations
+description: Local, staging, and production operations for the NWN:EE multiplayer compose stack.
+resource: docs/design/server-operations.md
+tags: [operations, docker, server]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # Server operations
 
 This runbook describes local/private NWN:EE multiplayer operations using the compose files in `docker/`. It is written for a small persistent-world stack with three services:

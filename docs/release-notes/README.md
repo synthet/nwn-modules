@@ -1,3 +1,12 @@
+---
+type: Runbook
+title: Release Notes
+description: Release-note requirements for validated builds, packaged artifacts, credits, and compatibility notes.
+resource: docs/release-notes/README.md
+tags: [release, validation, artifacts]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # Release Notes
 
 Each release should record:
