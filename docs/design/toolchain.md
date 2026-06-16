@@ -1,3 +1,12 @@
+---
+type: Design Document
+title: Toolchain Baseline
+description: Pinned NWN:EE, Nasher, neverwinter.nim, art, and texture tooling baseline.
+resource: docs/design/toolchain.md
+tags: [toolchain, versions, baseline]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # Toolchain Baseline
 
 This project pins its initial Neverwinter Nights: Enhanced Edition module workflow to the following baseline:

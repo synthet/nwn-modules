@@ -1,3 +1,12 @@
+---
+type: Design Document
+title: Modern NWN:EE Persistent World Project Design
+description: Roadmap and architecture for a maintainable NWN:EE persistent-world starter kit.
+resource: docs/design/persistent-world-project.md
+tags: [architecture, persistent-world, roadmap]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # Modern NWN:EE Persistent World Project Design
 
 This document turns the starter Aurora/Nasher module into a practical roadmap for a maintainable Neverwinter Nights: Enhanced Edition persistent-world-ready project. It assumes a solo developer or small team that wants to build a polished fantasy adventure module first, then grow it into a live PW.

@@ -1,3 +1,12 @@
+---
+type: Design Document
+title: NWN Tools Directory Layout
+description: External third-party Neverwinter Nights modding binary layout and PATH surface.
+resource: docs/design/nwn-tools-layout.md
+tags: [toolchain, nwn-tools, layout]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # NWN Tools Directory Layout
 
 External install root for third-party Neverwinter Nights modding binaries. On this workstation:

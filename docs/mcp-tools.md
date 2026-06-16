@@ -1,3 +1,12 @@
+---
+type: Runbook
+title: NWN Project MCP Server
+description: Structured AI-assistant tools for NWN project inspection, build, compile, docs, and diff workflows.
+resource: docs/mcp-tools.md
+tags: [mcp, ai-assistants, tooling]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # NWN Project MCP Server
 
 The MCP (Model Context Protocol) server exposes NWN:EE module development

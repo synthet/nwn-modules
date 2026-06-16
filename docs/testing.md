@@ -1,3 +1,12 @@
+---
+type: Runbook
+title: NWN Module Test Harness
+description: Testing strategy for mock unit tests, compile checks, and runtime-only NWN validation.
+resource: docs/testing.md
+tags: [testing, nwscript, runtime]
+timestamp: 2026-06-16T00:00:00Z
+---
+
 # NWN Module Test Harness
 
 This document describes the testing strategy for the module: what is covered
