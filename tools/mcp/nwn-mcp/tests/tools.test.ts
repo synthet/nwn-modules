@@ -6,7 +6,7 @@ import { execa } from 'execa';
 import { createTools } from '../src/tools.js';
 import type { NwnMcpConfig } from '../src/config.js';
 
-vi.mock('execa', () => ({ execa: vi.fn(async (_cmd:string, args:string[]) => ({ exitCode: args.includes('bad.nss') ? 1 : 0, stdout: args.includes('bad.nss') ? 'bad.nss:31:5: error: Undeclared identifier: oPC' : 'ok', stderr: '' })) }));
+vi.mock('execa', () => ({ execa: vi.fn(async (_cmd:string, args:string[]) => ({ exitCode: args.some((a:string)=>a.includes('bad.nss')) ? 1 : 0, stdout: args.some((a:string)=>a.includes('bad.nss')) ? 'bad.nss:31:5: error: Undeclared identifier: oPC' : 'ok', stderr: '' })) }));
 async function fixture(overrides: Partial<NwnMcpConfig> = {}): Promise<{root:string; tools:ReturnType<typeof createTools>; config:NwnMcpConfig}> {
   const root = await mkdtemp(path.join(os.tmpdir(), 'nwn-mcp-'));
   await mkdir(path.join(root,'src/scripts'),{recursive:true}); await mkdir(path.join(root,'src/dialogs'),{recursive:true}); await mkdir(path.join(root,'docs'),{recursive:true});

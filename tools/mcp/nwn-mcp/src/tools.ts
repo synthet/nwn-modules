@@ -34,8 +34,8 @@ export function createTools(config: NwnMcpConfig) {
     const gitignore = await readFile(path.join(root,'.gitignore'),'utf8').catch(()=> '');
     const gitignoreProblems = ['build','dist','*.mod','*.hak','*.tlk'].filter(x=>!gitignore.includes(x));
     const docsMissing = (await Promise.all(['docs/ATTRIBUTION.md','docs/BUILD.md'].map(async r=>[r,!(await exists(resolveWorkspacePath(root,r)))] as const))).filter(([,m])=>m).map(([r])=>r);
-    const tracked = await git.raw(['ls-files']);
-    const binaryTracked = tracked.split('\n').filter(f=>/\.(mod|hak|tlk|erf)$/i.test(f));
+    let binaryTracked: string[] = [];
+    try { const tracked = await git.raw(['ls-files']); binaryTracked = tracked.split('\n').filter((f:string)=>/\.(mod|hak|tlk|erf)$/i.test(f)); } catch { /* not a git repo */ }
     return { success: missing.length+gitignoreProblems.length+docsMissing.length+binaryTracked.length===0, missing, gitignoreProblems, docsMissing, binaryTracked };
   }
   function group(files:string[]) { const out: Record<string,string[]> = {scripts:[],dialogs:[],areas:[],creatures:[],items:[],assets:[],docs:[],other:[]}; for (const f of files) { if (/\.nss$/i.test(f)) out.scripts.push(f); else if (/dialogs|\.dlg\.json$/i.test(f)) out.dialogs.push(f); else if (/areas|\.(are|git|gic)\.json$/i.test(f)) out.areas.push(f); else if (/creatures|\.utc\.json$/i.test(f)) out.creatures.push(f); else if (/items|\.uti\.json$/i.test(f)) out.items.push(f); else if (/^(hak|external|art)|\.(2da|tga|dds|mdl|erf)$/i.test(f)) out.assets.push(f); else if (/^docs\//.test(f) || /README|DESIGN|CONTRIBUTING/.test(f)) out.docs.push(f); else out.other.push(f); } return out; }
