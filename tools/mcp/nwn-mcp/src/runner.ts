@@ -3,7 +3,7 @@ export interface CommandResult { success: boolean; command: string; args: string
 export async function runCommand(command: string, args: string[], options: Options = {}): Promise<CommandResult> {
   try {
     const r = await execa(command, args, { reject: false, all: false, ...options });
-    return { success: r.exitCode === 0, command, args, exitCode: r.exitCode, stdout: r.stdout ?? '', stderr: r.stderr ?? '' };
+    return { success: r.exitCode === 0, command, args, exitCode: r.exitCode, stdout: String(r.stdout ?? ''), stderr: String(r.stderr ?? '') };
   } catch (e) {
     const err = e as Error;
     return { success: false, command, args, stdout: '', stderr: '', error: err.message };

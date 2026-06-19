@@ -9,7 +9,7 @@ const config = await loadConfig();
 const tools = createTools(config);
 const server = new McpServer({ name: 'nwn-mcp', version: '0.1.0' });
 function reg(name:string, description:string, schema:any, fn:(args:any)=>Promise<unknown>) {
-  server.tool(name, description, schema.shape ?? {}, async (args:any) => ({ content: [{ type: 'text', text: JSON.stringify(await fn(schema.parse(args)), null, 2) }] }));
+  server.tool(name, description, schema.shape ?? {}, async (args:any) => ({ content: [{ type: 'text' as const, text: JSON.stringify(await fn(schema.parse(args)), null, 2) }] }));
 }
 const none = z.object({});
 reg('nwn.project.inspect','Inspect NWN project layout and configured tools.',none,tools.inspect);
