@@ -46,13 +46,32 @@ jobs:
         run: ./scripts/compile-scripts
 
   build-mcp-server:
-    name: Build MCP server
+    name: Build nwn-mcp server (active)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
+          cache-dependency-path: tools/mcp/nwn-mcp/package.json
+      - name: Install dependencies
+        run: cd tools/mcp/nwn-mcp && npm install
+      - name: Build
+        run: cd tools/mcp/nwn-mcp && npm run build
+      - name: Run MCP server tests
+        run: cd tools/mcp/nwn-mcp && npm test
+
+  build-mcp-server-legacy:
+    name: Build nwn-project-mcp server (prototype)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: tools/mcp/nwn-project-mcp/package-lock.json
       - name: Install dependencies
         run: cd tools/mcp/nwn-project-mcp && npm install
       - name: Build

@@ -18,10 +18,11 @@ nasher-temp/
 
 # NWN user-folder installed files (NWN_HOME paths)
 # These are runtime installs, not source
-modules/
-hak/
-tlk/
-override/
+# Root-anchored: only ignores these at the repo root, not src/tlk or src/hak etc.
+/modules/
+/hak/
+/tlk/
+/override/
 
 # Local NWN install paths that should not be committed
 Neverwinter Nights/

@@ -338,8 +338,8 @@ Build these before public launch:
 
 ## Immediate next steps for this repository
 
-- Add `database/` and `docker/` directories when Phase 3 begins.
 - Replace illustrative GFF stubs with a real Toolset seed module round-tripped through Nasher.
-- Add CI once local `nasher` and compiler commands are stable on contributor machines.
-- Add a `CREDITS.md` before accepting third-party or AI-assisted assets.
+- Populate `database/seeds/` with local development seed data once the Phase 3 schema is stable.
+- Add a real seed module to exercise the database migration in `database/migrations/0001_core_identity.sql`.
 - Keep release notes tied to exact NWN:EE build, Nasher version, HAK/TLK versions, and database migration number.
+- Complete `CREDITS.md` before accepting any third-party or AI-assisted assets.

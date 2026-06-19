@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git branch*)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(git push*)",
+      "Bash(python3 -m pytest*)",
+      "Bash(python3 -m unittest*)",
+      "Bash(./scripts/run-script-tests*)",
+      "Bash(./scripts/compile-scripts*)",
+      "Bash(./tools/smoke-test.sh*)",
+      "Bash(./tools/build.sh*)",
+      "Bash(./tools/compile-scripts.sh*)",
+      "Bash(./tools/pack.sh*)",
+      "Bash(cd tools/mcp/nwn-mcp && npm*)",
+      "Bash(cd tools/mcp/nwn-project-mcp && npm*)",
+      "Bash(npm install*)",
+      "Bash(npm run build*)",
+      "Bash(npm test*)",
+      "Bash(node*)",
+      "Bash(nasher pack*)",
+      "Bash(nasher unpack*)",
+      "Bash(nasher validate*)"
+    ],
+    "deny": [
+      "Bash(nasher install*)",
+      "Bash(docker compose down -v*)",
+      "Bash(rm -rf build/dist*)",
+      "Bash(git push --force*)"
+    ]
+  }
+}

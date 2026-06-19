@@ -1,4 +1,6 @@
-# NWN Project MCP Server
+# NWN MCP Server
+
+The active MCP server is **`tools/mcp/nwn-mcp/`** (entry point: `dist/server.js`).
 
 The MCP (Model Context Protocol) server exposes NWN:EE module development
 tooling as structured tools callable by AI coding assistants. Instead of
@@ -22,7 +24,7 @@ typed inputs and gets a structured JSON result.
 Requires Node.js 20+.
 
 ```bash
-cd tools/mcp/nwn-project-mcp
+cd tools/mcp/nwn-mcp
 npm install
 npm run build
 ```
@@ -30,7 +32,7 @@ npm run build
 To verify the build:
 
 ```bash
-node dist/index.js --help 2>&1 | head
+node tools/mcp/nwn-mcp/dist/server.js 2>&1 | head
 ```
 
 ---
@@ -39,8 +41,8 @@ node dist/index.js --help 2>&1 | head
 
 ### nwn-mcp.config.json
 
-The server reads `nwn-mcp.config.json` from the repo root (or
-`tools/mcp/nwn-project-mcp/`). Edit tool commands and paths:
+The server reads `nwn-mcp.config.json` from the repo root (or the path in
+`NWN_MCP_CONFIG`). Edit tool commands and paths:
 
 ```json
 {
@@ -94,9 +96,9 @@ File: `~/Library/Application Support/Claude/claude_desktop_config.json`
 ```json
 {
   "mcpServers": {
-    "nwn-project": {
+    "nwn": {
       "command": "node",
-      "args": ["/absolute/path/to/nwn-modules/tools/mcp/nwn-project-mcp/dist/index.js"],
+      "args": ["/absolute/path/to/nwn-modules/tools/mcp/nwn-mcp/dist/server.js"],
       "env": {
         "NWN_ROOT": "/path/to/NeverwinterNights/NWN"
       }
@@ -112,9 +114,9 @@ File: `~/.cursor/mcp.json`
 ```json
 {
   "mcpServers": {
-    "nwn-project": {
+    "nwn": {
       "command": "node",
-      "args": ["tools/mcp/nwn-project-mcp/dist/index.js"]
+      "args": ["tools/mcp/nwn-mcp/dist/server.js"]
     }
   }
 }
@@ -128,10 +130,10 @@ File: `.openai/mcp_config.json`
 {
   "servers": [
     {
-      "name": "nwn-project",
+      "name": "nwn",
       "transport": "stdio",
       "command": "node",
-      "args": ["tools/mcp/nwn-project-mcp/dist/index.js"]
+      "args": ["tools/mcp/nwn-mcp/dist/server.js"]
     }
   ]
 }

@@ -1,4 +1,15 @@
-# NWN:EE Module MCP Server
+# NWN:EE Module MCP Servers
+
+This directory contains two MCP server implementations:
+
+| Directory | Status | Test runner | Notes |
+|---|---|---|---|
+| `nwn-mcp/` | **Active — use this one** | vitest | Newer SDK, more complete NWNX tools, cleaner config loading |
+| `nwn-project-mcp/` | Prototype — kept for reference | jest/ts-jest | Earlier implementation; still functional but not actively developed |
+
+Use `nwn-mcp/` for all new work. Both servers expose the same `nwn.*` tool namespace and read `nwn-mcp.config.json` from the repository root.
+
+---
 
 The MCP (Model Context Protocol) server exposes NWN module development tooling
 as structured tools that AI coding assistants (Claude, Cursor, Codex, etc.) can
@@ -24,7 +35,7 @@ with typed inputs and gets a structured result back.
 ## Installation
 
 ```bash
-cd tools/mcp/nwn-project-mcp
+cd tools/mcp/nwn-mcp
 npm install
 npm run build
 ```
@@ -33,14 +44,7 @@ Node.js 20+ is required.
 
 ## Configuration
 
-Copy `.env.example` to `.env` and fill in your paths:
-
-```bash
-cp tools/mcp/nwn-project-mcp/.env.example tools/mcp/nwn-project-mcp/.env
-```
-
-The server also reads `nwn-mcp.config.json` (at the repo root or inside
-`tools/mcp/nwn-project-mcp/`). Edit paths and permissions there.
+The server reads `nwn-mcp.config.json` from the repository root (or set `NWN_MCP_CONFIG` env var to an explicit path). Edit paths and permissions there. See `tools/mcp/nwn-mcp/nwn-mcp.config.example.json` for the full schema.
 
 ## Example MCP client configs
 
@@ -49,9 +53,9 @@ The server also reads `nwn-mcp.config.json` (at the repo root or inside
 ```json
 {
   "mcpServers": {
-    "nwn-project": {
+    "nwn": {
       "command": "node",
-      "args": ["/absolute/path/to/nwn-modules/tools/mcp/nwn-project-mcp/dist/index.js"],
+      "args": ["/absolute/path/to/nwn-modules/tools/mcp/nwn-mcp/dist/server.js"],
       "env": {
         "NWN_ROOT": "/path/to/NeverwinterNights/NWN"
       }
@@ -65,9 +69,9 @@ The server also reads `nwn-mcp.config.json` (at the repo root or inside
 ```json
 {
   "mcpServers": {
-    "nwn-project": {
+    "nwn": {
       "command": "node",
-      "args": ["tools/mcp/nwn-project-mcp/dist/index.js"]
+      "args": ["tools/mcp/nwn-mcp/dist/server.js"]
     }
   }
 }
@@ -79,10 +83,10 @@ The server also reads `nwn-mcp.config.json` (at the repo root or inside
 {
   "servers": [
     {
-      "name": "nwn-project",
+      "name": "nwn",
       "transport": "stdio",
       "command": "node",
-      "args": ["tools/mcp/nwn-project-mcp/dist/index.js"]
+      "args": ["tools/mcp/nwn-mcp/dist/server.js"]
     }
   ]
 }

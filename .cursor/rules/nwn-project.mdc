@@ -1,0 +1,45 @@
+---
+description: NWN:EE Aurora module project rules for Cursor
+globs:
+  - "src/scripts/**/*.nss"
+  - "src/**/*.json"
+  - "tools/mcp/nwn-mcp/**/*.ts"
+  - "tools/testing/**/*.py"
+  - "database/migrations/*.sql"
+alwaysApply: true
+---
+
+# NWN:EE Module Project
+
+## NWScript files (`src/scripts/**/*.nss`)
+
+- Use the correct prefix: `inc_`, `db_`, `sys_`, `evt_`, `qst_`, `adm_`, `mod_on_`, `plc_`, `cre_`, `trg_`.
+- Keep event scripts thin — dispatch to `sys_*` modules, never put business logic in `mod_on_*.nss`.
+- All database calls go through `db_*` include files. No raw NWNX SQL in gameplay scripts.
+- Separate pure logic (arithmetic, state checks) from engine calls so Python tests can mirror them.
+- Never call `DelayCommand` or `AssignCommand` inside include files (`inc_*`).
+
+## GFF JSON files (`src/areas/`, `src/blueprints/`, `src/dialogs/`)
+
+These files are produced by `nasher unpack`. Do not hand-edit them — use the Aurora Toolset, save, then run `nasher unpack` to get reviewable diffs. Editing JSON directly risks mismatched GFF structure.
+
+## TypeScript MCP server (`tools/mcp/nwn-mcp/**/*.ts`)
+
+- Validate all file paths through `resolveWorkspacePath()` before use.
+- Use `safeArgs()` for command argument construction — never concatenate user input into shell strings.
+- Gate dangerous operations (`aurora.launch`, `nwnx.start_server`, install to NWN_HOME) with explicit boolean flags from config.
+- Return structured JSON from every tool handler.
+
+## Python tests (`tools/testing/script-tests/*.py`)
+
+- Always call `nwn.reset_state()` in `setUp()`.
+- Mirror NWScript pure functions exactly in Python — same logic, same parameter names.
+- Use only the Python standard library; no third-party test dependencies.
+
+## SQL migrations (`database/migrations/*.sql`)
+
+- Name: `NNNN_description.sql` (sequential, zero-padded).
+- Wrap in `BEGIN; ... COMMIT;`.
+- Add NOT NULL constraints and CHECK constraints for important columns.
+- Add indexes for foreign keys and common query patterns.
+- Never edit a migration that has been applied to any shared environment.
