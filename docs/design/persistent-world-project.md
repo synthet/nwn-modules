@@ -2,6 +2,28 @@
 
 This document turns the starter Aurora/Nasher module into a practical roadmap for a maintainable Neverwinter Nights: Enhanced Edition persistent-world-ready project. It assumes a solo developer or small team that wants to build a polished fantasy adventure module first, then grow it into a live PW.
 
+For what is already authored in `src/` today, see [game-resources.md](game-resources.md). For hak, 2DA, TLK, and art export workflow, see [custom-content.md](custom-content.md). For NWNX:EE status, deployment, and the campaign-DB → SQL migration plan, see [nwnx-integration.md](nwnx-integration.md).
+
+## Current state (Phase 1 scaffold)
+
+The repository is a **starter kit**, not a playable adventure yet:
+
+| Area | Status |
+|------|--------|
+| Module event chain | Wired (`mod_on_load`, `evt_on_enter/leave/death/respawn`) |
+| Starter area | `start_area` shell — empty GIT/GIC (no tiles or instances) |
+| Blueprints | `npc_guide`, `plc_start_chest` — templates only, not placed |
+| Dialog | `npc_guide` — single greeting |
+| Scripts | 25 files; DB/quest/faction/admin hooks are stubs |
+| Quest logic | `inc_quests.nss` scaffold for *The Missing Caravan*; no in-world content |
+| Custom 2DA | 3 rows in `starter_art.hak`; not referenced by blueprints |
+| TLK / art | `src/tlk/` and `art/exports/` empty |
+
+Known wiring gaps (detail in [game-resources.md](game-resources.md)):
+
+- `sys_login.nss` expects waypoint `WP_MODULE_START` — not placed in area.
+- `mod_on_client_enter.nss` exists but is not wired in `module.ifo.json`.
+
 ## Goals and constraints
 
 - Target **Neverwinter Nights: Enhanced Edition**, not NWN2.
@@ -65,6 +87,7 @@ nwn-modules/
   docs/
     design/
       persistent-world-project.md
+      nwnx-integration.md
       toolchain.md
       database.md
       custom-content.md
@@ -154,12 +177,20 @@ Avoid monolithic event scripts, expensive heartbeats, raw SQL in gameplay script
 
 ### Phase 1: PW-ready local module
 
-- One starter area, one wilderness route, one dungeon, one quest chain.
-- Basic rest/death/respawn rules.
-- Basic loot and merchant behavior.
-- Nasher build workflow.
-- Script compile checks.
-- No hard dependency on NWNX or a database.
+**Done (scaffold):**
+
+- Nasher build workflow and script compile checks.
+- Module event dispatch chain and DB-layer includes (campaign DB default; no NWNX hard dependency).
+- Starter area file, two blueprints, one dialog, chest loot script, quest pure-logic in `inc_quests.nss`.
+
+**Remaining:**
+
+- One starter area with placed tiles, NPC, chest, and `WP_MODULE_START` waypoint.
+- One wilderness route, one dungeon, one quest chain (*The Missing Caravan* or replacement).
+- Basic rest/death/respawn rules beyond current stubs.
+- Basic loot and merchant behavior beyond the starter chest.
+- Resolve `mod_on_client_enter.nss` vs `evt_on_enter` wiring.
+- TLK and art exports if custom strings or models are needed.
 
 ### Phase 2: private multiplayer test server
 
@@ -170,6 +201,8 @@ Avoid monolithic event scripts, expensive heartbeats, raw SQL in gameplay script
 - Clean-client custom-content test.
 
 ### Phase 3: database-backed persistence
+
+See [nwnx-integration.md](nwnx-integration.md) for NWNX deployment paths, Compose env vars, and the script-wrapper strategy.
 
 - NWNX:EE enabled server.
 - PostgreSQL schema and migrations.
@@ -237,6 +270,8 @@ Persistence rules:
 - Never scatter raw SQL throughout quest or object scripts.
 
 ## Custom content workflow
+
+See [custom-content.md](custom-content.md) for the full hak, 2DA, TLK, and art export workflow. Summary:
 
 1. Keep source art in `art/blender/` and `art/textures/`.
 2. Export game-ready assets to `art/exports/`.
@@ -338,7 +373,7 @@ Build these before public launch:
 
 ## Immediate next steps for this repository
 
-- Add `database/` and `docker/` directories when Phase 3 begins.
+- Wire `inc_db_core.nss` to NWNX SQL when Phase 3 persistence work begins (`database/` and `docker/` scaffolding already exist).
 - Replace illustrative GFF stubs with a real Toolset seed module round-tripped through Nasher.
 - Add CI once local `nasher` and compiler commands are stable on contributor machines.
 - Add a `CREDITS.md` before accepting third-party or AI-assisted assets.

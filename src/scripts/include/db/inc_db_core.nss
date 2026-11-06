@@ -3,9 +3,6 @@
 
 #include "inc_db_config"
 
-// Core persistence helpers. These wrappers currently target the NWN campaign
-// database so event/gameplay scripts can stay backend-agnostic. If the module
-// later moves to SQL/NWNX, only this include should need direct backend calls.
 int DB_IsAvailable()
 {
     if (!DB_FEATURE_ENABLED)
@@ -48,9 +45,10 @@ string DB_SafeAreaTag(object oObject)
     return GetTag(oArea);
 }
 
+// Campaign DB helpers retained for local Toolset testing when DB_USE_CAMPAIGN_FALLBACK is TRUE.
 int DB_GetInt(string sKey)
 {
-    if (!DB_IsAvailable())
+    if (!DB_IsAvailable() || !DB_USE_CAMPAIGN_FALLBACK)
         return 0;
 
     return GetCampaignInt(DB_CAMPAIGN_NAME, sKey);
@@ -58,7 +56,7 @@ int DB_GetInt(string sKey)
 
 void DB_SetInt(string sKey, int nValue)
 {
-    if (!DB_IsAvailable())
+    if (!DB_IsAvailable() || !DB_USE_CAMPAIGN_FALLBACK)
         return;
 
     SetCampaignInt(DB_CAMPAIGN_NAME, sKey, nValue);
@@ -66,7 +64,7 @@ void DB_SetInt(string sKey, int nValue)
 
 string DB_GetString(string sKey)
 {
-    if (!DB_IsAvailable())
+    if (!DB_IsAvailable() || !DB_USE_CAMPAIGN_FALLBACK)
         return "";
 
     return GetCampaignString(DB_CAMPAIGN_NAME, sKey);
@@ -74,7 +72,7 @@ string DB_GetString(string sKey)
 
 void DB_SetString(string sKey, string sValue)
 {
-    if (!DB_IsAvailable())
+    if (!DB_IsAvailable() || !DB_USE_CAMPAIGN_FALLBACK)
         return;
 
     SetCampaignString(DB_CAMPAIGN_NAME, sKey, sValue);

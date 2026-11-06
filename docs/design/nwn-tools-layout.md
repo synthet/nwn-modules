@@ -23,7 +23,7 @@ nwn-tools/
     └── 1.4.0/             # NWNT 1.4.0 release unpack (archive copy)
 ```
 
-`nwnx/` is reserved for an optional NWNX:EE server build (Phase 2+). It is **not** present on this machine yet.
+`nwnx/` is reserved for an optional NWNX:EE server build (Phase 2+). It is **not** present on this machine yet. Docker-based deployment via `ghcr.io/nwnxee/unified` is the documented default; see [nwnx-integration.md](nwnx-integration.md).
 
 ## `bin/` — executables on PATH
 

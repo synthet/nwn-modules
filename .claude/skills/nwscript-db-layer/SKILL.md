@@ -18,7 +18,7 @@ Entry scripts call `db_*` functions; includes hold SQL-ready abstractions.
 
 ## Current backend
 
-**Campaign DB** is the active default (`inc_db_core.nss`). Switching to NWNX PostgreSQL is intentional future work — not a bug to fix unprompted.
+**PostgreSQL via NWNX SQL** is the active default when running the Docker stack (`DB_USE_POSTGRESQL` in `inc_db_config.nss`). Campaign DB fallback is available with `DB_USE_CAMPAIGN_FALLBACK = TRUE` for Toolset-only testing.
 
 ## Patterns
 

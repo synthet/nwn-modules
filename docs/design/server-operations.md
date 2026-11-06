@@ -8,18 +8,20 @@ This runbook describes local/private NWN:EE multiplayer operations using the com
 
 The compose files are deployment scaffolding. Before any public launch, pin the NWN server image in `docker/.env`, rehearse backup/restore, and verify the exact runtime paths expected by the selected NWN/NWNX container image.
 
+For NWNX:EE's role in this project, SQL plugin environment variables, and the campaign-DB → PostgreSQL plan, see [nwnx-integration.md](nwnx-integration.md).
+
 ## First-time setup
 
+**Automated (recommended):** from the repository root run `bash tools/dev-up.sh` (or `.\scripts\dev-up.ps1` on Windows). This validates layout, compiles scripts, packs artifacts, syncs `docker/runtime/`, creates `docker/.env` if missing, applies migrations, and starts all services.
+
+**Manual:**
+
 1. Build module artifacts with the normal Nasher workflow so release files exist under `build/dist/`.
-2. Create local runtime directories:
-
-   ```sh
-   mkdir -p docker/runtime/{modules,hak,tlk,logs,nwsync} docker/backups
-   ```
-
+2. Runtime directories are created automatically by `tools/ops/sync-runtime.sh` (or `mkdir -p docker/runtime/{modules,hak,tlk,logs,nwsync} docker/backups`).
 3. Copy `docker/env.example` to `docker/.env` and set host-specific values. Do not commit `docker/.env`.
-4. Copy or sync the built module, hak, and tlk files into the matching `docker/runtime/` folders expected by the selected server image.
-5. If serving NWSync from the same host, generate the NWSync manifest/payloads and place them under `docker/runtime/nwsync/`.
+4. Run `bash tools/ops/sync-runtime.sh` to copy `.mod` / `.hak` / `.tlk` into `docker/runtime/`.
+5. Apply migrations: `bash tools/ops/migrate-db.sh --docker` (after `db` is up).
+6. If serving NWSync from the same host, `tools/nwsync-release.sh` runs automatically from `sync-runtime.sh` when `nwn_nwsync_write` is on PATH.
 
 ## Startup
 

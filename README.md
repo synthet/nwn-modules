@@ -42,6 +42,9 @@ On this machine, third-party tools install under `D:\Projects\nwn-tools`. The re
 
 - [Toolchain baseline](docs/design/toolchain.md)
 - [Modern NWN:EE persistent world project design](docs/design/persistent-world-project.md)
+- [Game resources inventory](docs/design/game-resources.md) — current `src/` content and gaps
+- [Custom content workflow](docs/design/custom-content.md) — haks, 2DAs, TLK, art exports
+- [Build](docs/BUILD.md)
 - [Tooling script guide](tools/README.md)
 
 ## AI assistant setup
@@ -84,6 +87,35 @@ nasher pack tlk
 
 Artifacts are written to `build/dist/`. They are excluded from Git — use GitHub Releases or the Neverwinter Vault for distribution.
 
+## Quick start: Hello World persistent server
+
+One command builds the module, syncs artifacts into Docker runtime folders, applies PostgreSQL migrations, and starts the NWNX stack (server + database + NWSync):
+
+```sh
+bash tools/dev-up.sh
+```
+
+Windows (Git Bash):
+
+```powershell
+.\scripts\dev-up.ps1
+```
+
+Then connect with NWN:EE direct connect to `127.0.0.1:5121`. New characters spawn at `WP_MODULE_START` in `start_area`; login/logout writes `accounts` and `characters` rows in PostgreSQL.
+
+Manual steps (if you prefer not to use `dev-up`):
+
+```sh
+bash tools/pack.sh
+bash tools/ops/sync-runtime.sh
+cp docker/env.example docker/.env   # set DATABASE_PASSWORD locally
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d db
+bash tools/ops/migrate-db.sh --docker
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d
+```
+
+See [docs/design/server-operations.md](docs/design/server-operations.md) for backup, restore, and staging overlays.
+
 ## Project structure
 
 ```
@@ -106,7 +138,7 @@ tools/        — helper scripts for the team
 
 ## Source file notes
 
-GFF files in `src/` (`.json` extension) are produced by `nasher unpack`. The stubs committed here are illustrative starting points — **replace them by running `nasher unpack` on your seed Aurora Toolset module** before editing content.
+GFF files in `src/` (`.json` extension) are produced by `nasher unpack`. The committed sources are a minimal starter scaffold — see [docs/design/game-resources.md](docs/design/game-resources.md) for the current inventory. Place NPCs, waypoints, and tiles in the Aurora Toolset, then `nasher unpack` to round-trip layout changes into Git.
 
 2DA files in `src/2da/` contain only the project's **custom rows**. If base-game rows are required, merge into a master 2DA in a top-priority hak early — do not defer this.
 

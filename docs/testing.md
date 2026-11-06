@@ -147,7 +147,7 @@ class TestMyLogic(unittest.TestCase):
 
 ## The pure-logic testing pattern
 
-The key insight is to **separate pure logic from engine calls** in NWScript.
+The key insight is to **separate pure logic from engine calls** in NWScript. The quest scaffold in `inc_quests.nss` is documented in [design/game-resources.md](design/game-resources.md).
 
 **In `inc_quests.nss` (NWScript):**
 
@@ -248,3 +248,5 @@ module loaded on an NWNX server. Test scripts would run as NWScript and report
 results via NWNX plugin calls. This covers the engine behaviours that the mock
 cannot emulate: conversations, area transitions, combat, visual effects, and
 module event chaining.
+
+NWNX deployment and MCP tooling status: [design/nwnx-integration.md](design/nwnx-integration.md).

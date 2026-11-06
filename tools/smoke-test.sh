@@ -7,7 +7,7 @@ required_paths=(
   "nasher.cfg"
   "src/module/module.ifo.json"
   "src/scripts/mod_on_load.nss"
-  "src/scripts/mod_on_client_enter.nss"
+  "src/scripts/evt_on_enter.nss"
   "docs/design/toolchain.md"
   "docs/design/persistent-world-project.md"
 )

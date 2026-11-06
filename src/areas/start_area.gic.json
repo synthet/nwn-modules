@@ -1,12 +1,167 @@
 {
   "__data_type": "GIC ",
-  "Creature List": { "type": "list", "value": [] },
-  "Door List":     { "type": "list", "value": [] },
-  "Encounter List":{ "type": "list", "value": [] },
-  "List":          { "type": "list", "value": [] },
-  "Placeable List":{ "type": "list", "value": [] },
-  "SoundList":     { "type": "list", "value": [] },
-  "StoreList":     { "type": "list", "value": [] },
-  "TriggerList":   { "type": "list", "value": [] },
-  "WaypointList":  { "type": "list", "value": [] }
+  "Creature List": {
+    "type": "list",
+    "value": [
+      {
+        "__struct_id": 4,
+        "Tag": {
+          "type": "cexostring",
+          "value": "NPC_GUIDE"
+        },
+        "TemplateResRef": {
+          "type": "resref",
+          "value": "npc_guide"
+        },
+        "XOrientation": {
+          "type": "float",
+          "value": 0.0
+        },
+        "XPosition": {
+          "type": "float",
+          "value": 5.0
+        },
+        "YOrientation": {
+          "type": "float",
+          "value": 1.0
+        },
+        "YPosition": {
+          "type": "float",
+          "value": 3.0
+        },
+        "ZPosition": {
+          "type": "float",
+          "value": 0.0
+        }
+      }
+    ]
+  },
+  "Door List": {
+    "type": "list",
+    "value": []
+  },
+  "Encounter List": {
+    "type": "list",
+    "value": []
+  },
+  "List": {
+    "type": "list",
+    "value": []
+  },
+  "Placeable List": {
+    "type": "list",
+    "value": [
+      {
+        "__struct_id": 9,
+        "Tag": {
+          "type": "cexostring",
+          "value": "CHEST_START"
+        },
+        "TemplateResRef": {
+          "type": "resref",
+          "value": "plc_start_chest"
+        },
+        "XOrientation": {
+          "type": "float",
+          "value": 0.0
+        },
+        "XPosition": {
+          "type": "float",
+          "value": 3.0
+        },
+        "YOrientation": {
+          "type": "float",
+          "value": 1.0
+        },
+        "YPosition": {
+          "type": "float",
+          "value": 5.0
+        },
+        "ZPosition": {
+          "type": "float",
+          "value": 0.0
+        }
+      }
+    ]
+  },
+  "SoundList": {
+    "type": "list",
+    "value": []
+  },
+  "StoreList": {
+    "type": "list",
+    "value": []
+  },
+  "TriggerList": {
+    "type": "list",
+    "value": []
+  },
+  "WaypointList": {
+    "type": "list",
+    "value": [
+      {
+        "__struct_id": 5,
+        "Tag": {
+          "type": "cexostring",
+          "value": "WP_MODULE_START"
+        },
+        "TemplateResRef": {
+          "type": "resref",
+          "value": "nw_waypoint001"
+        },
+        "XOrientation": {
+          "type": "float",
+          "value": 0.0
+        },
+        "XPosition": {
+          "type": "float",
+          "value": 1.5
+        },
+        "YOrientation": {
+          "type": "float",
+          "value": 1.0
+        },
+        "YPosition": {
+          "type": "float",
+          "value": 1.5
+        },
+        "ZPosition": {
+          "type": "float",
+          "value": 0.0
+        },
+        "Appearance": {
+          "type": "byte",
+          "value": 1
+        },
+        "Description": {
+          "type": "cexolocstring",
+          "str_ref": 4294967295,
+          "value": {}
+        },
+        "HasMapNote": {
+          "type": "byte",
+          "value": 0
+        },
+        "LinkedTo": {
+          "type": "cexostring",
+          "value": ""
+        },
+        "LocalizedName": {
+          "type": "cexolocstring",
+          "str_ref": 4294967295,
+          "value": {
+            "0": "WP_MODULE_START"
+          }
+        },
+        "MapNote": {
+          "type": "cexostring",
+          "value": ""
+        },
+        "MapNoteEnabled": {
+          "type": "byte",
+          "value": 0
+        }
+      }
+    ]
+  }
 }

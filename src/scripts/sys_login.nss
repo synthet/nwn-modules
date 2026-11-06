@@ -9,6 +9,8 @@ void Login_OnEnter(object oPC)
         object oWP = GetWaypointByTag("WP_MODULE_START");
         if (GetIsObjectValid(oWP))
             AssignCommand(oPC, JumpToObject(oWP));
+
+        SendMessageToPC(oPC, "Welcome to the Starter Module persistent world.");
     }
 }
 

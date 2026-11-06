@@ -20,7 +20,7 @@ src/              Canonical game content (Nasher source tree)
   tlk/            Custom talk table sources
 database/migrations/   PostgreSQL schema (append-only after deploy)
 tools/            Build scripts and MCP server
-docs/design/      Architecture and operational runbooks
+docs/design/      Architecture, game resources, and operational runbooks
 build/            Generated artifacts (git-ignored)
 ```
 
@@ -33,7 +33,7 @@ build/            Generated artifacts (git-ignored)
 | neverwinter.nim | 2.1.2 |
 | Blender + NeverBlender | 4.0.0 + 4.1.0 |
 
-Details: [docs/design/toolchain.md](docs/design/toolchain.md)
+Details: [docs/design/toolchain.md](docs/design/toolchain.md). Current `src/` inventory: [docs/design/game-resources.md](docs/design/game-resources.md).
 
 ## NWScript conventions
 
@@ -157,3 +157,25 @@ Canonical MCP package: `tools/mcp/nwn-project-mcp` (CI-built).
 - Never commit `nwn-mcp.config.json` or `.cursor/mcp.json` (use `*.example.json`)
 - Do not bump toolchain pins without explicit review
 - Do not enable dangerous MCP permissions (`allowDeleteFiles`, `allowStartServer`) without user request
+
+<!-- BEGIN FRAMEWORK SETUP -->
+
+## Shared agent setup
+
+Project-specific instructions in this file and nested instruction files govern this workspace.
+Reusable skills are authored in `.claude/skills/`; other harness trees are generated.
+Run installed helpers relative to their skill directory; run project checks from this workspace.
+Preserve user edits, credentials, model settings, permissions and unrelated configuration.
+Project build/test/lint commands were not detected; consult project documentation before executing checks.
+
+Installed library: 57 applicable skills. Synchronize explicitly; startup hooks never install updates.
+<!-- END FRAMEWORK SETUP -->
+
+<!-- FRAMEWORK RULE REFERENCES -->
+Read the always-on project rules before working:
+- `.claude/rules/karpathy-coding.md`
+- `.claude/rules/mcp-toolchain.md`
+- `.claude/rules/nwn-core.md`
+- `.claude/rules/safety-and-secrets.md`
+- `.claude/rules/sdlc-core.md`
+<!-- END FRAMEWORK RULE REFERENCES -->

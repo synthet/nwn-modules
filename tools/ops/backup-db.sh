@@ -1,39 +1,26 @@
 #!/usr/bin/env bash
+# Backup PostgreSQL database to docker/backups/
 set -euo pipefail
 
-usage() {
-  cat <<'USAGE'
-Usage: PW_ENV=<env> DATABASE_URL=<postgres-url> BACKUP_DESTINATION=<dest> [RELEASE_ID=<id>] tools/ops/backup-db.sh
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ENV_FILE="$ROOT/docker/.env"
 
-Placeholder only: validates backup inputs and prints the pg_dump action future automation should perform.
-USAGE
-}
-
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  usage
-  exit 0
+if [[ ! -f "$ENV_FILE" ]]; then
+  echo "ERROR: missing $ENV_FILE" >&2
+  exit 1
 fi
 
-required_vars=(PW_ENV DATABASE_URL BACKUP_DESTINATION)
+set -a
+# shellcheck disable=SC1090
+source "$ENV_FILE"
+set +a
 
-for var in "${required_vars[@]}"; do
-  if [[ -z "${!var:-}" ]]; then
-    echo "ERROR: required environment variable ${var} is not set." >&2
-    usage >&2
-    exit 2
-  fi
-done
+DATABASE_NAME="${DATABASE_NAME:-nwn_persistent_world}"
+DATABASE_USER="${DATABASE_USER:-nwn}"
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+OUT="/backups/${STAMP}-${DATABASE_NAME}.dump"
 
-release_id="${RELEASE_ID:-manual-$(date -u +%Y%m%dT%H%M%SZ)}"
-dump_name="${PW_ENV}-${release_id}.pgdump"
+docker compose --env-file "$ENV_FILE" -f "$ROOT/docker/docker-compose.yml" exec -T db \
+  pg_dump -U "$DATABASE_USER" -d "$DATABASE_NAME" -Fc -f "$OUT"
 
-cat <<MSG
-Backup placeholder validated required environment for ${PW_ENV}.
-Future implementation should run a custom-format PostgreSQL dump, for example:
-  pg_dump --format=custom --no-owner --file "${BACKUP_DESTINATION%/}/${dump_name}" "\${DATABASE_URL}"
-
-Expected destination artifact:
-  ${BACKUP_DESTINATION%/}/${dump_name}
-
-No backup was created by this placeholder script.
-MSG
+echo "Backup written to docker/backups/$(basename "$OUT")"

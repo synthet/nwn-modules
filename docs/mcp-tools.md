@@ -381,6 +381,8 @@ Copy a `.mod` file to `build/snapshots/<timestamp>-<label>.mod`.
 
 These tools exist as stubs. They return `{ "ok": false, "error": "not yet implemented" }`.
 
+NWNX server tools are scaffolded in `nwn-project-mcp`; the legacy `tools/mcp/nwn-mcp` package has partial local-binary helpers. See [design/nwnx-integration.md](design/nwnx-integration.md#mcp-tooling).
+
 | Tool | Planned purpose |
 |------|----------------|
 | `nwn.aurora.watch_changes` | Watch Aurora save events |

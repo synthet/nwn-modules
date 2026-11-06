@@ -2,18 +2,22 @@
 #define INC_DB_CONFIG
 
 // Persistence configuration and feature flags.
-// Keep database names and keys centralized so gameplay scripts do not embed
-// backend-specific persistence details.
 const int DB_FEATURE_ENABLED = TRUE;
 const int DB_FEATURE_AUDIT_ENABLED = TRUE;
 const int DB_FEATURE_CHARACTER_METADATA_ENABLED = TRUE;
+const int DB_USE_CAMPAIGN_FALLBACK = FALSE;
+const int DB_USE_POSTGRESQL = TRUE;
 
 const string DB_CAMPAIGN_NAME = "nwn_pw";
+const string DB_UNAVAILABLE_FLAG = "DB_UNAVAILABLE";
+const string DB_LOCAL_ACCOUNT_ID = "DB_ACCOUNT_ID";
+const string DB_LOCAL_CHARACTER_ID = "DB_CHARACTER_ID";
+
+// Legacy campaign key prefixes (unused when DB_USE_POSTGRESQL is TRUE).
 const string DB_KEY_ACCOUNT_PREFIX = "acct:";
 const string DB_KEY_CHARACTER_PREFIX = "char:";
 const string DB_KEY_AUDIT_PREFIX = "audit:";
 const string DB_KEY_AUDIT_COUNTER = "audit_counter";
-const string DB_UNAVAILABLE_FLAG = "DB_UNAVAILABLE";
 
 const string DB_FIELD_EXISTS = ":exists";
 const string DB_FIELD_PLAYER_NAME = ":player_name";

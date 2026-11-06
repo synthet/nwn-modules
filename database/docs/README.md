@@ -1,6 +1,6 @@
 # Database migrations
 
-This directory stores database changes for the persistent-world server. The Phase 3 target database is PostgreSQL, with SQLite reserved only for throwaway local prototypes.
+This directory stores database changes for the persistent-world server. The Phase 3 target database is PostgreSQL (via the NWNX:EE SQL plugin in the Compose stack), with SQLite reserved only for throwaway local prototypes. See [../../docs/design/nwnx-integration.md](../../docs/design/nwnx-integration.md) for how NWNX connects to this schema.
 
 ## Directory layout
 

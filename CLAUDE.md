@@ -44,7 +44,7 @@ docker/           Compose stack files and env templates
 deploy/
   systemd/        systemd unit template for host-native deployments
 tools/            Build and operations helper scripts
-docs/design/      Architecture decisions and operational runbooks
+docs/design/      Architecture, game resources, and operational runbooks
 art/              Source art (Blender, textures) — binaries excluded from Git
 build/            Build output — excluded from Git
 ```
@@ -124,3 +124,5 @@ Type `/` to invoke project workflows defined in `.claude/skills/`:
 Background skills (auto-loaded): `nwscript-authoring`, `nwscript-db-layer`, `database-migrations`, `nwn-build-toolchain`, `docker-ops`.
 
 MCP setup: [config/ai/README.md](config/ai/README.md)
+
+@AGENTS.md
