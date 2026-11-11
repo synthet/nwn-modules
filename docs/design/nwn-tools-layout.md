@@ -165,6 +165,6 @@ source tools/env.sh
 |----------|---------|--------------|
 | `NWN_TOOLS` | Third-party modding binaries (this directory) | `D:/Projects/nwn-tools` |
 | `NWN_ROOT` | NWN:EE game install (Aurora Toolset, base `data/`) | `D:/SteamLibrary/steamapps/common/Neverwinter Nights` |
-| `NWN_HOME` | User folder (`modules/`, `hak/`, `override/`) | `C:/Users/dmnsy/Documents/Neverwinter Nights` |
+| `NWN_HOME` | User folder (`modules/`, `hak/`, `override/`) | `C:/Users/<you>/Documents/Neverwinter Nights` |
 
 `NWN_TOOLS` does not contain game assets or the Aurora Toolset. Those live under `NWN_ROOT`.
